@@ -79,9 +79,11 @@ sudo pacman -Sy --noconfirm --needed rate-mirrors
 #sudo cachyos-rate-mirrors
 
 # Instala paru 
-sudo pacman -S --noconfirm --needed paru
+sudo pacman -S --noconfirm --needed yay
 add_chaotic_repo
 sudo pacman -Syyu
+
+echo "alias paru='yay'" > ~/.bashrc
 
 # Agrega colores a pacman.conf
 if ! grep -q "ILoveCandy" /etc/pacman.conf; then
