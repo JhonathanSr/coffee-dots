@@ -1,0 +1,15 @@
+# Ignorar toda la carpeta de almacenamiento y bases de datos de Zen
+config/zen/*/storage/
+config/zen/*/datareporting/
+
+# Ignorar archivos de base de datos y metadatos específicos
+**/*.safe.bin
+**/.metadata-v2
+**/cache/
+**/temp/
+
+# Si quieres ignorar TODO el perfil de usuario excepto la configuración base
+# (Recomendado para evitar subir contraseñas o sesiones)
+config/zen/*/
+!config/zen/*/prefs.js
+!config/zen/*/user.js

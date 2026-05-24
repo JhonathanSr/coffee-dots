@@ -1,0 +1,168 @@
+/* ==============================================================================
+ * ARCHIVO: Waybar Configuration (Coffee-Dots Modules)
+ * DESCRIPCIÓN: Definición lógica de los módulos de la barra de estado. 
+ *              Configura el monitoreo de hardware (Ryzen/Radeon), gestión de
+ *              redes, VPN y accesos directos a herramientas TUI vía Ghostty.
+ * DEPENDENCIAS: ghostty, btop, nmtui, calcurse, rmpc, pritunl-client.
+ * AUTOR: Jhonathan Ruiz (Coffee-Dots)
+ * FECHA: 15/05/2026
+ * ============================================================================== */
+{
+  /* --- Módulo de Identidad --- */
+  "custom/logo": {
+    "format": " ",
+    "on-click": "ghostty"
+  },
+  /* --- Gestión de Tiempo y Calendario --- */
+  /* Integra calcurse para la gestión de agenda mediante un clic. */
+  "clock": {
+    "format": "{:L%a %d %b %H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 1,
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "days": "<span color='#ecc6d9'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions": {
+      "on-click-middle": "mode",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    },
+    "on-click": "ghostty --title=calendar -e calcurse"
+  },
+  /* --- Conectividad (Red y Bluetooth) --- */
+  "network": {
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
+    "format": "{icon}",
+    "format-wifi": "{icon}",
+    "format-ethernet": "󰀂",
+    "format-disconnected": "󰖪",
+    "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "interval": 3,
+    "on-click": "ghostty --title=wifi -e nmtui"
+  },
+  "bluetooth": {
+    "format": " ",
+    "format-disabled": "󰂲",
+    "format-connected": "",
+    "tooltip-format": "Devices connected: {num_connections}",
+    "on-click": "ghostty --title=bluetooth -e bluetui"
+  },
+  /* --- Audio y Multimedia --- */
+  /* Control de volumen via wiremix y reproductor rmpc para tu música FLAC. */
+  "custom/wiremix": {
+    "format": "{icon} ",
+    "interval": 3,
+    "on-click": "ghostty --title=Wiremix -e wiremix",
+    "on-click-right": "pamixer -t",
+    "tooltip-format": "Volume {volume}%",
+    "scroll-step": 5,
+    "format-muted": "󰝟",
+    "format-icons": {
+      "default": [
+        "󰕾",
+        "󰖀",
+        "󰖁"
+      ]
+    }
+  },
+  "custom/music": {
+    "format": "󰥠 {}",
+    "on-click": "ghostty --title=rmpc -e rmpc",
+    "tooltip": false
+  },
+  /* --- Monitoreo de Hardware --- */
+  "custom/cpu-usage": {
+    "format": "󰍛 {}%",
+    "exec": "top -bn1 | grep 'Cpu(s)' | awk '{print $2}' | cut -d'%' -f1",
+    "interval": 2,
+    "on-click": "ghostty --title=btop -e btop",
+    "tooltip": false
+  },
+  "custom/ram-usage": {
+    "format": "󰓅 {}%",
+    "exec": "free | grep Mem | awk '{printf \"%.0f\", $3/$2 * 100.0}'",
+    "interval": 2,
+    "on-click": "ghostty --title=btop -e btop",
+    "tooltip": false
+  },
+  "custom/gpu-usage": {
+    "format": " 󰢮 {}%",
+    "exec": "cat /sys/class/drm/card1/device/gpu_busy_percent",
+    "interval": 2,
+    "on-click": "ghostty --title=btop -e btop",
+    "tooltip": false
+  },
+  "custom/cpu-temp": {
+    "format": " {}°C",
+    "exec": "cat /sys/class/thermal/thermal_zone0/temp | awk '{printf \"%.0f\", $1/1000}'",
+    "interval": 2,
+    "on-click": "ghostty --title=btop -e btop",
+    "tooltip": false
+  },
+  /* --- Utilidades de Sistema y VPN --- */
+  "custom/vpn": {
+    "interval": 3,
+    "format": "{}",
+    "exec": "/home/jhonathansr/.config/hypr/bin/status-vpn",
+    "on-click": "ghostty --title=pritunl -e pritunl-client",
+    "tooltip": false
+  },
+  "tray": {
+    "icon-size": 19,
+    "spacing": 12,
+    "reverse-direction": true
+  },
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-discharging": "{icon} {capacity}%",
+    "format-charging": "{icon} {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-icons": {
+      "charging": [
+        "󰢜",
+        "󰂆",
+        "󰂇",
+        "󰂈",
+        "󰢝",
+        "󰂉",
+        "󰢞",
+        "󰂊",
+        "󰂋",
+        "󰂅"
+      ],
+      "default": [
+        "󰁺",
+        "󰁻",
+        "󰁼",
+        "󰁽",
+        "󰁾",
+        "󰁿",
+        "󰂀",
+        "󰂁",
+        "󰂂",
+        "󰁹"
+      ]
+    },
+    "format-full": " {capacity}%",
+    "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
+    "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
+    "interval": 5,
+    "states": {
+      "warning": 20,
+      "critical": 10
+    }
+  }
+}

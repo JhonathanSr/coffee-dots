@@ -1,0 +1,7 @@
+#!/bin/bash
+
+clear
+echo -e "\033[32m"
+cat </home/jhonathansr/aux/omarchy-cachyos/logo.txt
+echo -e "\033[0m"
+echo

@@ -1,0 +1,55 @@
+#!/bin/bash
+
+
+# ==============================================================================
+# SCRIPT: Global Font Switcher & System Propagator
+# DESCRIPCIÓN: Cambia dinámicamente la tipografía del sistema de forma global.
+#              Modifica las configuraciones de Alacritty, Waybar, SwayOSD y 
+#              actualiza la fuente monoespaciada por defecto en Fontconfig,
+#              reiniciando los servicios afectados para aplicar los cambios.
+# DEPENDENCIAS: sed, xmlstarlet, fontconfig (fc-list), core-utils.
+# AUTOR: Jhonathan Ruiz (Coffee-Dots)
+# FECHA: 15/05/2026
+# ==============================================================================
+
+# --- Argumento de Entrada ---
+font_name="$1"
+
+# --- Validación de Parámetros y Disponibilidad ---
+# Verificamos que el argumento no esté vacío y no corresponda a una señal de cancelación (CNCLD).
+if [[ -n "$font_name" && "$font_name" != "CNCLD" ]]; then
+  
+  # Consulta al servidor de fuentes para verificar que la tipografía requerida esté instalada.
+  if fc-list | grep -iq "$font_name"; then
+    
+    # --- Mutación de Archivos de Configuración ---
+
+    # Terminal (Alacritty): Reemplaza la familia tipográfica en formato TOML.
+    sed -i "s/family = \".*\"/family = \"$font_name\"/g" ~/.config/ghostty/config
+    
+    # Barra de Estado (Waybar): Actualiza la fuente en las hojas de estilo CSS.
+    sed -i "s/font-family: .*/font-family: $font_name;/g" ~/.config/waybar/style.css
+    
+    # OSD de Sistema (SwayOSD): Sincroniza la estética visual de las alertas de volumen/brillo.
+    sed -i "s/font-family: .*/font-family: $font_name;/g" ~/.config/swayosd/style.css
+    
+    # Fuentes del Sistema (Fontconfig XML): Modifica el fallback de la fuente monoespaciada
+    # utilizando xmlstarlet de forma segura en lugar de expresiones regulares propensas a errores.
+    xmlstarlet ed -L \
+      -u '//match[@target="pattern"][test/string="monospace"]/edit[@name="family"]/string' \
+      -v "$font_name" \
+      ~/.config/fontconfig/fonts.conf
+
+    # --- Aplicación de Cambios en Caliente (Hot Reload) ---
+    # Invocación de scripts del entorno para refrescar los componentes visuales de Hyprland.
+    restart-waybar
+    restart-swayosd
+    restart-walker
+    
+  else
+    echo "Font '$font_name' not found."
+    exit 1
+  fi
+else
+  echo "Usage: omarchy-font-set <font-name>"
+fi

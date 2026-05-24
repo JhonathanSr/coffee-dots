@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+# ==============================================================================
+# SCRIPT: Terminal Screensaver (TTE Edition)
+# DESCRIPCIÓN: Animación aleatoria de logo ASCII para la terminal.
+# DEPENDENCIAS: terminaltexteffects (tte), coreutils (shuf, sed, tr).
+# AUTOR: Jhonathan Ruiz (Coffee-Dots)
+# FECHA: 14/05/2026
+# ==============================================================================
+
+# --- Configuración de Rutas ---
+# LOGO_PATH: Define la ubicación del arte ASCII que se va a animar.
+LOGO_PATH="$HOME/.config/coffee/logo.txt"
+
+# --- Pre-flight Check ---
+# Verificamos si el binario 'tte' está disponible en el $PATH del sistema.
+if command -v tte &>/dev/null; then
+
+  # --- Manejo de Señales (Graceful Shutdown) ---
+  # Si el usuario presiona Ctrl+C (SIGINT) o se termina el proceso (SIGTERM),
+  # nos aseguramos de matar los subprocesos de 'tte' antes de salir.
+  trap 'pkill tte; exit' SIGINT SIGTERM
+
+  # --- Bucle Principal de Animación ---
+  while true; do
+
+    # --- Extracción Dinámica de Efectos ---
+    # 1. Obtenemos el help de tte.
+    # 2. sed: Filtramos el bloque de texto entre las llaves {}.
+    # 3. tr/grep: Limpiamos caracteres y saltos de línea para obtener una lista pura.
+    # 4. shuf: Seleccionamos un efecto al azar de la lista resultante.
+    effect=$(tte --help | sed -n '/{/,/}/p' | tr -d '{} ' | tr ',' '\n' | grep -v '^$' | shuf -n1)
+
+    # --- Ejecución del Motor Visual ---
+    # --frame-rate 144: Sincronizado con la tasa de refresco del monitor Acer.
+    # --canvas-width/height: Ajuste dinámico al tamaño actual de la terminal.
+    # --anchor: Centrado absoluto del lienzo y el texto.
+    # --random-effect: Flag nativo para variaciones dentro del efecto elegido.
+    tte -i "$LOGO_PATH" \
+      --frame-rate 144 \
+      --canvas-width $(tput cols) \
+      --canvas-height $(($(tput lines) - 2)) \
+      --anchor-canvas c \
+      --anchor-text c \
+      --random-effect &
+
+    # --- Captura del Process ID (PID) ---
+    TTE_PID=$!
+
+    # --- Listener de Interrupción de Teclado ---
+    # Mientras el proceso de 'tte' esté corriendo (kill -0)...
+    while kill -0 $TTE_PID 2>/dev/null; do
+      # Escaneamos el input del usuario cada 0.1 segundos.
+      # Si se presiona CUALQUIER tecla, terminamos la ejecución.
+      if read -n 1 -t 0.1; then
+        pkill -P $$ tte 2>/dev/null
+        exit 0
+      fi
+    done
+
+    # Breve pausa de seguridad antes de reiniciar el bucle con un nuevo efecto.
+    sleep 1
+  done
+
+else
+  # --- Error Handling ---
+  echo "Error: 'terminaltexteffects' no encontrado."
+  echo "Instalación sugerida: pip install terminaltexteffects"
+  exit 1
+fi

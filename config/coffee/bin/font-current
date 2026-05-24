@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# ==============================================================================
+# SCRIPT: Ghostty Font Configuration Extractor
+# DESCRIPCIÓN: Inspecciona el archivo de configuración del emulador de terminal 
+#              (Ghostty/Alacritty TOML) y extrae de forma limpia el nombre de 
+#              la primera familia de fuentes configurada mediante Regex.
+# DEPENDENCIAS: grep, coreutils (head).
+# AUTOR: Jhonathan Ruiz (Coffee-Dots)
+# FECHA: 15/05/2026
+# ==============================================================================
+
+# --- Extracción y Filtrado de la Fuente ---
+# grep -oP: Activa expresiones regulares de Perl (PCRE) y solo muestra el texto coincidente.
+# 'family\s*=\s*"\K[^"]+': 
+#    - Busca la clave 'family', ignorando espacios alrededor del '='.
+#    - \K descarta todo lo anterior en el resultado (Lookbehind emulado).
+#    - [^"]+ captura todo el nombre de la fuente hasta las siguientes comillas.
+# head -n1: Se asegura de retornar únicamente la primera coincidencia en caso de duplicados.
+grep -oP 'family\s*=\s*"\K[^"]+' ~/.config/ghostty/config | head -n1

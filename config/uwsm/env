@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# ==============================================================================
+# SCRIPT: Coffee-Dots Environment & Paths
+# DESCRIPCIÓN: Configuración de variables de entorno para el ecosistema Coffee,
+#              inicialización del gestor de runtimes (Mise) e integración del
+#              lanzador Walker.
+# DEPENDENCIAS: bash, mise, walker.
+# AUTOR: Jhonathan Ruiz (Coffee-Dots)
+# FECHA: 15/05/2026
+# ==============================================================================
+
+# --- Rutas del Sistema Coffee ---
+# Definimos la ruta base para los activos de Coffee y extendemos el PATH
+# para dar prioridad a los binarios y scripts personalizados del usuario.
+export COFFEE_PATH="$HOME/.local/share/coffee"
+export PATH="$COFFEE_PATH/bin/":"$PATH"
+
+# --- Gestión de Runtimes (Mise) ---
+# Si 'mise' está instalado, activamos su entorno. Esencial para gestionar
+# versiones de lenguajes de desarrollo de forma aislada y eficiente.
+if command -v mise &> /dev/null; then
+  eval "$(mise activate bash)"
+fi

@@ -1,0 +1,117 @@
+/* ==============================================================================
+ * ARCHIVO: Waybar Stylesheet (Coffee-Dots Edition)
+ * DESCRIPCIÓN: Definición de estilos CSS para la barra de estado. Implementa
+ *              un diseño minimalista basado en CaskaydiaMono Nerd Font y
+ *              esquemas de colores dinámicos mediante importación.
+ * AUTOR: Jhonathan Ruiz (Coffee-Dots)
+ * FECHA: 15/05/2026
+ * ============================================================================== */
+
+/* --- Importación de Tema Dinámico --- */
+/* Se vincula con el sistema de temas dinámicos de Coffee-Dots para reflejar
+   el esquema de colores actual (ej. Tokyo Night). */
+@import "../themes/current/waybar.css";
+
+/* --- Estilos Globales --- */
+* {
+  background-color: @background;
+  color: @foreground;
+
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  font-family: CaskaydiaMono Nerd Font;
+  font-size: 20px;
+}
+
+/* --- Layout y Márgenes de Módulos --- */
+.modules-left {
+  margin-left: 8px;
+}
+
+.modules-right {
+  margin-right: 8px;
+}
+
+/* --- Configuración de Workspaces --- */
+#workspaces button {
+  all: initial;
+  padding: 0 6px;
+  margin: 0 1.5px;
+  min-width: 9px;
+}
+
+#workspaces button.empty {
+  opacity: 0.5; /* Diferenciación visual para áreas de trabajo inactivas. */
+}
+
+/* --- Módulos de Información General --- */
+#tray,
+#clock,
+#custom-logo {
+  min-width: 12px;
+  margin: 0 7.5px;
+}
+
+#tooltip {
+  padding: 2px;
+}
+
+/* --- Módulos de Red y Conectividad --- */
+#network {
+  margin-right: 14px;
+  font-size: 20px;
+  padding: 1px;
+  min-width: 18px;
+}
+
+#bluetooth {
+  margin-right: 6px;
+  font-size: 20px;
+  min-width: 18px;
+  padding: 3px;
+}
+
+#custom-vpn {
+  font-size: 20px;
+  padding: 2px;
+  min-width: 18px;
+  margin-left: 2px;
+}
+
+/* --- Monitoreo de Hardware (Performance) --- */
+/* Estilos unificados para el monitoreo de CPU, RAM y Temperaturas. */
+#cpu {
+  font-size: 20px;
+  min-width: 18px;
+  margin-right: 12px;
+}
+
+#battery,
+#custom-cpu-usage,
+#custom-ram-usage, 
+#custom-cpu-temp {
+  font-size: 17px;
+  min-width: 18px;
+  margin: 0 10px;
+  padding: 0px;
+}
+
+/* --- Reloj y Multimedia --- */
+#clock {
+  font-size: 20px;
+}
+
+#custom-music {
+  margin-right: 12px;
+  font-size: 20px;
+  padding: 0px;
+  min-width: 18px;
+}
+
+#custom-music.muted {
+  font-size: 20px;
+  padding: 2px;
+  min-width: 18px;
+  margin-left: 2px;
+}

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# ==============================================================================
+# SCRIPT: Monospaced Font System Lister
+# DESCRIPCIÓN: Consulta el servidor fontconfig para obtener un listado único y 
+#              ordenado de todas las fuentes monoespaciadas válidas del sistema, 
+#              filtrando y descartando conjuntos de iconos, glifos o emojis.
+# DEPENDENCIAS: fontconfig (fc-list), grep, coreutils (sort).
+# AUTOR: Jhonathan Ruiz (Coffee-Dots)
+# FECHA: 15/05/2026
+# ==============================================================================
+
+# --- Consulta y Filtrado de Tipografías ---
+# fc-list :spacing=100: Filtra estrictamente fuentes de ancho fijo (Dual/Monospace).
+# -f "%{family[0]}\n": Formatea la salida para mostrar únicamente el primer nombre de la familia.
+# grep -v -i -E: Excluye de forma insensible a mayúsculas expresiones regulares que contengan
+#                glifos especiales (como colecciones de emojis o simbologías de escritura).
+# sort -u: Ordena alfabéticamente el resultado y elimina las variantes duplicadas.
+fc-list :spacing=100 -f "%{family[0]}\n" | grep -v -i -E 'emoji|signwriting' | sort -u
