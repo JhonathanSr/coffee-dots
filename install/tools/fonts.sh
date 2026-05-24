@@ -26,6 +26,8 @@ FONTS=(
   "noto-fonts-emoji"
   "noto-fonts-cjk"
   "noto-fonts-extra"
+  "ttf-dejavu"
+  "ttf-liberation"
 )
 
 # --- Proceso de Instalación ---

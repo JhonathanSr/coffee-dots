@@ -75,7 +75,7 @@ add_chaotic_repo() {
 }
 
 # Actualiza los espejos 
-sudo pacman -Sy --noconfirm --needed cachyos-rate-mirrors rate-mirrors
+sudo pacman -Sy --noconfirm --needed rate-mirrors
 sudo cachyos-rate-mirrors
 
 # Instala paru 
