@@ -4,7 +4,7 @@
 # SCRIPT: Development Tools & Toolchains Setup
 # DESCRIPCIÓN: Instalación de compiladores, lenguajes de programación y utilidades
 #              de productividad para el flujo de trabajo de ingeniería de software.
-# DEPENDENCIAS: paru, gcc, python, go, rust, github-cli.
+# DEPENDENCIAS: sudo pacman, gcc, python, go, rust, github-cli.
 # AUTOR: Jhonathan Ruiz (Coffee-Dots)
 # FECHA: 15/05/2026
 # ==============================================================================
@@ -13,19 +13,19 @@
 # Instalamos los motores de construcción necesarios para compilar software desde
 # fuentes, kernels personalizados o módulos de AUR.
 # ninja: Alternativa de alto rendimiento a make, usada por muchos proyectos modernos.
-paru -S --noconfirm --needed gcc cmake make ninja
+sudo pacman -S --noconfirm --needed gcc cmake make ninja
 
 # --- Lenguajes de Programación y Runtimes ---
 # Despliegue de los stacks tecnológicos base para el desarrollo multiplataforma.
 # clang/llvm: Suite de compiladores C/C++/Obj-C de alto rendimiento.
 # python-pip: Gestión de paquetes para scripts y herramientas Python.
 # go/rust: Lenguajes de sistemas modernos para alto rendimiento y seguridad.
-paru -S --noconfirm --needed mise clang llvm go rust
+sudo pacman -S --noconfirm --needed mise clang llvm go rust
 mise use -g python
-paru -S python-pip 
+sudo pacman -S python-pip 
 
 # --- Productividad y Gestión de Proyectos Git ---
 # imagemagick: Manipulación de imágenes por terminal (esencial para ricing/scripts).
 # github-cli (gh): Interacción con GitHub (PRs, Issues, Repos) sin salir de la shell.
 # lazygit: Interfaz TUI visual para gestionar commits, ramas y rebase de forma fluida.
-paru -S --noconfirm --needed imagemagick github-cli lazygit 
+sudo pacman -S --noconfirm --needed imagemagick github-cli lazygit 

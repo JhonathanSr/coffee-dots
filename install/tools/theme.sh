@@ -6,25 +6,25 @@
 #              Gestiona motores de temas Qt (Kvantum), GTK, iconos y cursores, 
 #              además de sincronizar el esquema de colores entre aplicaciones 
 #              como Neovim, Ghostty y BTOP mediante enlaces simbólicos.
-# DEPENDENCIAS: paru, gsettings, kvantum-qt5, gnome-themes-extra.
+# DEPENDENCIAS: sudo pacman, gsettings, kvantum-qt5, gnome-themes-extra.
 # AUTOR: Jhonathan Ruiz (Coffee-Dots)
 # FECHA: 15/05/2026
 # ==============================================================================
 
 # --- Gestión de Motores de Temas ---
 # Kvantum permite que aplicaciones Qt sigan una estética personalizada.
-if ! paru -Q kvantum-qt5 &>/dev/null; then
-  paru -S --noconfirm kvantum-qt5
+if ! sudo pacman -Q kvantum-qt5 &>/dev/null; then
+  sudo pacman -S --noconfirm kvantum-qt5
 fi
 
 # Temas base de GNOME necesarios para aplicaciones GTK en entornos Wayland.
-if ! paru -Q gnome-themes-extra &>/dev/null; then
-  paru -S --noconfirm gnome-themes-extra 
+if ! sudo pacman -Q gnome-themes-extra &>/dev/null; then
+  sudo pacman -S --noconfirm gnome-themes-extra 
 fi
 
 # Iconografía Yaru (Ubuntu style) para un look moderno y pulido.
-if ! paru -Q yaru-icon-theme &>/dev/null; then
-  paru -S --noconfirm yaru-icon-theme
+if ! sudo pacman -Q yaru-icon-theme &>/dev/null; then
+  sudo pacman -S --noconfirm yaru-icon-theme
 fi
 
 # --- Configuración Global de Interfaz (GSettings) ---

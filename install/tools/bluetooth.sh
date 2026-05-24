@@ -12,7 +12,7 @@
 
 # --- Instalación de Herramientas ---
 # 'bluetui' proporciona una interfaz TUI minimalista ideal para Tiling Window Managers.
-paru -S --noconfirm --needed bluetui
+sudo pacman -S --noconfirm --needed bluetui
 
 # --- Configuración y Activación del Servicio ---
 # Habilitamos el demonio de Bluetooth (bluez) para que inicie con el sistema.

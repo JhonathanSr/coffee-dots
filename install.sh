@@ -39,7 +39,7 @@ show_subtext() {
 # --- Fase 0: Pre-flight Checks ---
 # Verificación de privilegios, conexión y estado del sistema antes de iniciar.
 source "$PATH_INSTALL/preflight/guard.sh"
-source "$PATH_INSTALL/preflight/aur.sh"
+#source "$PATH_INSTALL/preflight/aur.sh"
 source "$PATH_INSTALL/preflight/presentation.sh"
 #source "$PATH_INSTALL/preflight/installed.sh"
 

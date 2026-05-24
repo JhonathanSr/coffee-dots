@@ -5,7 +5,7 @@
 # DESCRIPCIÓN: Instalación de fuentes tipográficas, glifos de Nerd Fonts y
 #              soporte para emojis y caracteres CJK (Chino, Japonés, Coreano).
 #              Esencial para la correcta visualización de Waybar y Neovim.
-# DEPENDENCIAS: paru, fontconfig.
+# DEPENDENCIAS: sudo pacman, fontconfig.
 # AUTOR: Jhonathan Ruiz (Coffee-Dots)
 # FECHA: 15/05/2026
 # ==============================================================================
@@ -34,7 +34,7 @@ FONTS=(
 echo "Instalando ecosistema tipográfico..."
 
 # Instalamos la lista completa asegurando que solo se descargue lo necesario.
-paru -S --noconfirm --needed "${FONTS[@]}"
+sudo pacman -S --noconfirm --needed "${FONTS[@]}"
 
 # --- Post-instalación ---
 # Refrescamos la caché de fuentes del sistema para que las apps las detecten.
