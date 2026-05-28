@@ -6,83 +6,87 @@
 #              configuración del sistema y despliegue de herramientas en Arch.
 # DEPENDENCIAS: bash, coreutils, paru/yay (AUR), sudo, mlocate (updatedb).
 # AUTOR: Jhonathan Ruiz (Coffee-Dots)
-# FECHA: 14/05/2026
+# FECHA: 28/05/2026
 # ==============================================================================
+
+# Colores para mensajes
+CRE=$(tput setaf 1) # Red
+CYE=$(tput setaf 3) # Yellow
+CGR=$(tput setaf 2) # Green
+CBL=$(tput setaf 4) # Blue
+BLD=$(tput bold)    # Bold
+CNC=$(tput sgr0)    # Reset colors
 
 # --- Configuración de Entorno ---
 # Finaliza la ejecución si cualquier comando falla (Error Handling estricto).
 set -e
 
-# Exportamos el PATH para incluir el directorio del repositorio.
-export PATH="$HOME/coffee-dots:$PATH"
-PATH_INSTALL="$HOME/coffee-dots/install"
+# Rutas globales del repositorio
+export COFFEE_PATH="$HOME/coffee-dots"
+PATH_INSTALL="$COFFEE_PATH/.install"
 
 # --- Manejo de Errores (Global Catch) ---
-# Se ejecuta cuando un comando retorna un código de salida distinto de cero.
 catch_errors() {
-  echo -e "\n\e[31m¡La instalación de Dots falló!\e[0m"
+  echo -e "\n${CRE}${BLD}¡La instalación general de Coffee-Dots falló!${CNC}"
   echo "Puedes reintentarlo ejecutando: bash $HOME/coffee-dots/install.sh"
-  echo "Si el error persiste, por favor repórtalo con: bash $HOME/coffee-dots/report-error.sh"
+  echo "Si el error persiste, por favor repórtalo en: https://github.com/JhonathanSr/coffee-dots/issues"
 }
 
-# Trap para capturar la señal ERR y ejecutar la función de limpieza/aviso.
+# Trap para capturar la señal ERR y ejecutar la función de aviso global.
 trap catch_errors ERR
 
 # --- Funciones de Interfaz Visual ---
-
-# show_subtext: Imprime mensajes de estado y progreso en la instalación.
 show_subtext() {
-  echo "$1"
+  echo -e "${CYE}${BLD}$1${CNC}"
   echo
 }
 
 # --- Fase 0: Pre-flight Checks ---
-# Verificación de privilegios, conexión y estado del sistema antes de iniciar.
+# Verificación de estado del sistema antes de iniciar.
 source "$PATH_INSTALL/preflight/guard.sh"
-source "$PATH_INSTALL/preflight/aur.sh"
-source "$PATH_INSTALL/preflight/presentation.sh"
-#source "$PATH_INSTALL/preflight/installed.sh"
 
-# --- Fase 1: Configuración Base [1/5] ---
+# --- Fase 1: Inicialización del Sistema y Repositorios [1/5] ---
+show_subtext "Inicializando repositorios y actualizando llaves... [1/5]"
+bash "$PATH_INSTALL/00-system_init.sh"  # Tu antiguo aur.sh optimizado
 
-show_subtext "¡Listo para instalar! [1/5]"
 
-source "$PATH_INSTALL/config/config.sh"
-source "$PATH_INSTALL/config/network.sh"
-source "$PATH_INSTALL/config/power.sh"
-source "$PATH_INSTALL/config/timezones.sh"
-source "$PATH_INSTALL/config/login.sh"
+# --- Fase 2: Instalación de Paquetes y Herramientas [2/5] ---
+show_subtext "Instalando paquetes oficiales y del AUR [2/5]"
+bash "$PATH_INSTALL/01-pacman.sh"
+bash "$PATH_INSTALL/02-paru.sh"
 
-# --- Fase 2: Herramientas y Entorno [2/5] ---
-show_subtext "Instalando herramientas y entorno [2/5]"
+# --- Fase 3: Despliegue de Configuraciones Estáticas y Aplicaciones [3/5] ---
+show_subtext "Desplegando archivos de configuración (Dotfiles) y mimetypes [3/5]"
 
-source "$PATH_INSTALL/tools/development.sh"   # Java, Spring Boot, Angular.
-source "$PATH_INSTALL/tools/terminal.sh"      # Ghostty, Zsh, etc.
-source "$PATH_INSTALL/tools/desktop.sh"       # Utilidades de escritorio.
-source "$PATH_INSTALL/tools/hyprlandia.sh"    # Compositor y Rice.
-source "$PATH_INSTALL/tools/theme.sh"         # Apariencia GTK/Icons.
-source "$PATH_INSTALL/tools/bluetooth.sh"
-source "$PATH_INSTALL/tools/fonts.sh"
+# Módulo que clona o copia tus carpetas espejo hacia ~/.config
+bash "$PATH_INSTALL/03-configs.sh"
+# Mapeo de tipos de archivo por defecto
+source "$COFFEE_PATH/install/apps/mimetypes.sh"
 
-# --- Fase 3: Aplicaciones y Tipos MIME [3/5] ---
-show_subtext "Configurando aplicaciones y mimetypes [3/5]"
+# --- Fase 4: Controladores de Hardware Inteligentes [4/5] ---
+show_subtext "Analizando hardware e inyectando optimizaciones gráficas [4/5]"
 
-source "$PATH_INSTALL/apps/mimetypes.sh"
+# Módulo dedicado a revisar si tienes la GPU dedicada de la Lenovo LOQ o AMD
+bash "$PATH_INSTALL/04-drivers.sh"
 
-# --- Fase 4: Configuraciones Extra [4/5] ---
-show_subtext "Aplicando configuraciones adicionales [4/5]"
+# --- Fase 5: Ajustes de Entorno, Hooks y Sistema [5/5] ---
+show_subtext "Aplicando ganchos finales del sistema y activando servicios [5/5]"
+# --- Fase 5: System Hooks [5/5] ---
+printf "%b\n" "${CBL}${BLD}[Coffee-Dots] Ejecutando ganchos de sistema modulares...${CNC}"
+if [ -d ".install/hooks" ]; then
+  for hook in .install/hooks/[0-9]*.sh; do
+    if [ -x "$hook" ]; then
+      printf "%b\n" "${BLD}${CYE}→ Corriendo gancho: $(basename "$hook")${CNC}"
+      "$hook"
+    fi
+  done
+fi
 
-source "$PATH_INSTALL/extra/extra.sh"
-
-# --- Fase 5: Actualización Final del Sistema [5/5] ---
-show_subtext "Sincronizando y actualizando sistema [5/5]"
-
-# Actualizamos la base de datos de archivos y el sistema completo vía AUR helper.
+# Sincronización final de la indexación de archivos locales
 sudo updatedb
-paru -Syu --noconfirm
 
 # --- Finalización ---
-show_subtext "¡Disfruta tu café con Arch Linux y Coffee-Dots!"
+echo -e "\n${CGR}${BLD}¡Disfruta tu café con Arch Linux y Coffee-Dots! ☕${CNC}\n"
 
 # Pausa de cortesía antes del reinicio necesario para aplicar cambios.
 sleep 2
