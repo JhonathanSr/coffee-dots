@@ -12,7 +12,7 @@
 # --- Despliegue de Dotfiles (Rice) ---
 # Copiamos recursivamente todas las configuraciones del repositorio al HOME.
 # Esto incluye Hyprland, Waybar, Neovim, Ghostty, etc.
-#cp -R "$HOME/coffee-dots/config/"* ~/.config/
+#cp -R "$HOME/coffee-dots/config/*" ~/.config/
 
 # --- Configuración de Shell y Terminal ---
 # Sobrescribimos los archivos base de Bash para integrar el entorno Coffee.
@@ -51,5 +51,5 @@ git config --global init.defaultBranch master
 # --- Gestión de Notas Personales ---
 # Inicialización del entorno de notas en Markdown.
 mkdir -p ~/Documents/Notes
-cp "$HOME/dots/default/notes.md" ~/Documents/Notes
+cp "$HOME/coffee-dots/default/notes.md" ~/Documents/Notes
 

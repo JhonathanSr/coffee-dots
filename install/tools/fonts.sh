@@ -14,7 +14,6 @@
 # Utilizamos una matriz para organizar las fuentes por categoría.
 FONTS=(
   # Iconografía y Glifos (Esencial para Waybar y TUI apps)
-  "ttf-font-awesome"
   "ttf-cascadia-mono-nerd"
   
   # Fuentes Monoespaciadas para Desarrollo (Neovim/Ghostty)

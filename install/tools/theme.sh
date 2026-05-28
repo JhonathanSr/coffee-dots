@@ -13,8 +13,8 @@
 
 # --- Gestión de Motores de Temas ---
 # Kvantum permite que aplicaciones Qt sigan una estética personalizada.
-if ! paru -Q kvantum-qt5 &>/dev/null; then
-  paru -S --noconfirm kvantum-qt5
+if ! paru -Q kvantum-qt6 &>/dev/null; then
+  paru -S --noconfirm kvantum-qt6
 fi
 
 # Temas base de GNOME necesarios para aplicaciones GTK en entornos Wayland.
@@ -32,31 +32,4 @@ fi
 gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
 gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
 gsettings set org.gnome.desktop.interface icon-theme "Yaru-blue"
-
-# --- Despliegue de Activos Visuales ---
-
-
-# --- Orquestación de Temas Dinámicos (Symlinks) ---
-# Creamos una estructura de 'current' para cambiar de tema globalmente con un enlace.
-mkdir -p $HOME/.config/themes/current
-ln -snf $HOME/coffee-dots/themes/vantablack ~/.config/themes/current/theme
-ln -snf $HOME/coffee-dots/themes/backgrounds/back-moon.jpg ~/.config/themes/
-
-# --- Sincronización de Aplicaciones Específicas ---
-
-# Neovim: Enlazamos el plugin de color a la configuración actual.
-ln -snf ~/.config/themes/current/theme/neovim.lua ~/.config/nvim/lua/plugins/theme.lua
-
-# BTOP: Aplicamos el esquema de colores para el monitor de recursos.
-mkdir -p ~/.config/btop/themes
-ln -snf ~/.config/themes/current/theme/btop.theme ~/.config/btop/themes/current.theme
-
-# Mako: Configuración de colores para las notificaciones.
-mkdir -p ~/.config/mako
-ln -snf ~/.config/themes/current/theme/mako.ini ~/.config/mako/config
-
-# Ghostty: Sincronizamos el tema de la terminal de alto rendimiento.
-mkdir -p ~/.config/ghostty/themes
-ln -snf ~/.config/themes/current/theme/ghostty.config ~/.config/ghostty/themes/current.config
-
 

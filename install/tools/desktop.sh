@@ -12,7 +12,7 @@
 # --- Soporte Gráfico (Vulkan) ---
 # Vital para el rendimiento en juegos y aceleración por hardware en aplicaciones.
 # Incluye el loader y capas de validación necesarias para el soporte gráfico completo.
-paru -S --noconfirm --needed vulkan-icd-loader vulkan-validation-layers vulkan-headers 
+paru -S --noconfirm --needed vulkan-icd-loader
 
 # --- Multimedia y Visualización ---
 # mpv/imv/feh: Visores ligeros y potentes para video e imágenes.
@@ -30,7 +30,7 @@ paru -S --noconfirm --needed brightnessctl playerctl pamixer wiremix wireplumber
 # --- Entrada de Texto y Clipboard ---
 # fcitx5: Framework de entrada (esencial para carácteres especiales o idiomas).
 # wl-clip-persist: Mantiene el historial del portapapeles incluso al cerrar apps en Wayland.
-paru -S --noconfirm --needed fcitx5 fcitx5-gtk fcitx5-qt fcitx5-configtool wl-clip-persist
+paru -S --noconfirm --needed fcitx5 fcitx5-gtk fcitx5-configtool wl-clipboard wl-clipboard
 
 # --- Captura y Grabación de Pantalla ---
 # grim/slurp: Base para capturas de pantalla en Wayland.
@@ -41,7 +41,7 @@ paru -S --noconfirm --needed slurp grim satty wl-screenrec
 # --- Utilidades de Sistema y Escritorio ---
 # libva-utils: Verificación de aceleración de video.
 # ffmpegthumbnailer: Generación de miniaturas en gestores de archivos.
-paru -S --noconfirm --needed libva-utils qt5-tools ffmpegthumbnailer nautilus nautilus-python sushi obsidian
+paru -S --noconfirm --needed libva-utils ffmpegthumbnailer nautilus nautilus-python sushi obsidian
 
 # --- Navegación Web ---
 # Zen Browser: Navegador basado en Firefox optimizado para privacidad y estética.
@@ -51,4 +51,4 @@ paru -S --noconfirm --needed zen-browser-bin
 # portproton: Capa de compatibilidad optimizada para juegos de Windows.
 # gamemode/gamescope: Optimizadores de rendimiento de Feral e Valve.
 # bitwarden: Gestión segura de contraseñas.
-paru -S --needed portproton gamemode gamescope lib32-gamemode vkbasalt bitwarden
+paru -S --needed cachyos-gaming-applications protonup-qt vkbasalt bitwarden

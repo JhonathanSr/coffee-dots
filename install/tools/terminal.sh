@@ -22,7 +22,7 @@ paru -S --noconfirm --needed fd eza fzf ripgrep zoxide
 # --- Manipulación y Visualización de Datos ---
 # Herramientas para el manejo de streams de texto, JSON, XML y gestión 
 # del portapapeles en entornos Wayland.
-paru -S --noconfirm --needed bat jq xmlstarlet wl-clipboard
+paru -S --noconfirm --needed bat jq xmlstarlet imagemagick chafa 
 
 # --- Monitorización y Rendimiento ---
 # Visualización estética de información del sistema y monitoreo de recursos (TUI).
@@ -30,11 +30,11 @@ paru -S --noconfirm --needed fastfetch btop nvtop
 
 # --- Herramientas de Ayuda y Documentación ---
 # Gestión de manuales, autocompletado de shell y búsqueda rápida de archivos indexados.
-paru -S --noconfirm --needed man tldr less plocate bash-completion
+paru -S --noconfirm --needed man tldr less plocate 
 
 # --- Gestión de Archivos ---
 # Utilidades para la descompresión y manejo de paquetes de datos.
-paru -S --noconfirm --needed unzip
+paru -S --noconfirm --needed unzip zip unrar p7zip
 
 # --- Terminales y Multiplexores ---
 # Ghostty como emulador de terminal de alto rendimiento y Zellij para 

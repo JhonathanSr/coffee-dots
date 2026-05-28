@@ -54,7 +54,6 @@ source "$PATH_INSTALL/config/timezones.sh"
 source "$PATH_INSTALL/config/login.sh"
 
 # --- Fase 2: Herramientas y Entorno [2/5] ---
-show_logo decrypt 920
 show_subtext "Instalando herramientas y entorno [2/5]"
 
 source "$PATH_INSTALL/tools/development.sh"   # Java, Spring Boot, Angular.
@@ -66,19 +65,16 @@ source "$PATH_INSTALL/tools/bluetooth.sh"
 source "$PATH_INSTALL/tools/fonts.sh"
 
 # --- Fase 3: Aplicaciones y Tipos MIME [3/5] ---
-show_logo expand
 show_subtext "Configurando aplicaciones y mimetypes [3/5]"
 
 source "$PATH_INSTALL/apps/mimetypes.sh"
 
 # --- Fase 4: Configuraciones Extra [4/5] ---
-show_logo expand
 show_subtext "Aplicando configuraciones adicionales [4/5]"
 
 source "$PATH_INSTALL/extra/extra.sh"
 
 # --- Fase 5: Actualización Final del Sistema [5/5] ---
-show_logo highlight
 show_subtext "Sincronizando y actualizando sistema [5/5]"
 
 # Actualizamos la base de datos de archivos y el sistema completo vía AUR helper.
@@ -86,7 +82,6 @@ sudo updatedb
 paru -Syu --noconfirm
 
 # --- Finalización ---
-show_logo laseretch 920
 show_subtext "¡Disfruta tu café con Arch Linux y Coffee-Dots!"
 
 # Pausa de cortesía antes del reinicio necesario para aplicar cambios.

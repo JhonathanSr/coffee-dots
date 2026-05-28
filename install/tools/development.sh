@@ -20,12 +20,15 @@ paru -S --noconfirm --needed gcc cmake make ninja
 # clang/llvm: Suite de compiladores C/C++/Obj-C de alto rendimiento.
 # python-pip: Gestión de paquetes para scripts y herramientas Python.
 # go/rust: Lenguajes de sistemas modernos para alto rendimiento y seguridad.
-paru -S --noconfirm --needed mise clang llvm go rust
+paru -S --noconfirm --needed mise clang llvm 
 mise use -g python
-paru -S python-pip 
+mise use -g go
+mise use -g rust
 
 # --- Productividad y Gestión de Proyectos Git ---
-# imagemagick: Manipulación de imágenes por terminal (esencial para ricing/scripts).
 # github-cli (gh): Interacción con GitHub (PRs, Issues, Repos) sin salir de la shell.
 # lazygit: Interfaz TUI visual para gestionar commits, ramas y rebase de forma fluida.
-paru -S --noconfirm --needed imagemagick github-cli lazygit 
+paru -S --noconfirm --needed github-cli lazygit
+
+# --- Contenedores ---
+paru -S --noconfirm --needed docker docker-compose lazydocker
