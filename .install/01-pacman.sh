@@ -140,6 +140,17 @@ install_official_packages() {
     "noto-fonts-emoji"
     "noto-fonts-cjk"
     "noto-fonts-extra"
+
+    "waybar"
+    "mako"
+    "swayosd"
+    "uwsm"
+    "fd"
+    "eza"
+    "fzf"
+    "ripgrep"
+    "zoxide"
+    "gtk-engine-murrine"
   )
 
   sudo pacman -S --needed --noconfirm "${CORE_PACKAGES[@]}"
