@@ -43,7 +43,7 @@ show_subtext() {
 
 # --- Fase 0: Pre-flight Checks ---
 # Verificación de estado del sistema antes de iniciar.
-source "$PATH_INSTALL/preflight/guard.sh"
+source "$PATH_INSTALL/guard.sh"
 
 # --- Fase 1: Inicialización del Sistema y Repositorios [1/5] ---
 show_subtext "Inicializando repositorios y actualizando llaves... [1/5]"
@@ -60,14 +60,12 @@ show_subtext "Desplegando archivos de configuración (Dotfiles) y mimetypes [3/5
 
 # Módulo que clona o copia tus carpetas espejo hacia ~/.config
 bash "$PATH_INSTALL/03-configs.sh"
-# Mapeo de tipos de archivo por defecto
-source "$COFFEE_PATH/install/apps/mimetypes.sh"
 
 # --- Fase 4: Controladores de Hardware Inteligentes [4/5] ---
 show_subtext "Analizando hardware e inyectando optimizaciones gráficas [4/5]"
 
 # Módulo dedicado a revisar si tienes la GPU dedicada de la Lenovo LOQ o AMD
-bash "$PATH_INSTALL/04-drivers.sh"
+#bash "$PATH_INSTALL/04-.sh"
 
 # --- Fase 5: Ajustes de Entorno, Hooks y Sistema [5/5] ---
 show_subtext "Aplicando ganchos finales del sistema y activando servicios [5/5]"
