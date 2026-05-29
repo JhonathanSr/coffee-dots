@@ -150,7 +150,6 @@ install_official_packages() {
     "fzf"
     "ripgrep"
     "zoxide"
-    "gtk-engine-murrine"
   )
 
   sudo pacman -S --needed --noconfirm "${CORE_PACKAGES[@]}"

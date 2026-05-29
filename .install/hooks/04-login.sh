@@ -1,5 +1,9 @@
-#!/bin/bash
-# Componente: Autologin Seamless con VT Manager en C + UWSM (Flicker-Free & Cifrado)
+#!/usr/bin/env bash
+# ==============================================================================
+# Componente: 04-login | Autologin Seamless con VT Manager en C + UWSM
+# Descripción: Prepara la TTY1 en modo gráfico (KD_GRAPHICS) y levanta la
+#              sesión de UWSM de forma nativa e independiente post-cifrado.
+# ==============================================================================
 
 CRE=$(tput setaf 1); CYE=$(tput setaf 3); CGR=$(tput setaf 2); CBL=$(tput setaf 4); BLD=$(tput bold); CNC=$(tput sgr0)
 ERROR_LOG="$HOME/coffee-dots/coffee-errors.log"
@@ -8,17 +12,25 @@ ERROR_LOG="$HOME/coffee-dots/coffee-errors.log"
 REAL_USER="${SUDO_USER:-$(logname 2>/dev/null || echo "$USER")}"
 REAL_HOME=$(eval echo "~$REAL_USER")
 
-trap 'printf "%s%sERROR:%s Fallo en setup de Autologin UWSM (Línea $LINENO)\n" "${CRE}" "${BLD}" "${CNC}" >&2' ERR
+# --- Manejo Quirúrgico de Errores ---
+log_error() {
+  local error_msg="$1"
+  local timestamp
+  timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+  printf "[%s] ERROR (Hook Login): %s\n" "${timestamp}" "${error_msg}" >>"$ERROR_LOG"
+  printf "%s%sERROR:%s %s\n" "${CRE}" "${BLD}" "${CNC}" "${error_msg}" >&2
+}
 
-if ! command -v uwsm &>/dev/null; then
-  printf "%b\n" "${CRE}⚠️ UWSM no está instalado. Saltando configuración de autologin.${CNC}"
-  exit 0
-fi
+trap 'log_error "Fallo inesperado en la línea $LINENO del script de login"' ERR
 
 # ------------------------------------------------------------------------------
 # 1. Compilación Segura del VT Manager (Seamless-Login)
 # ------------------------------------------------------------------------------
-if [ ! -x /usr/local/bin/seamless-login ]; then
+compile_vt_manager() {
+  if [ -x /usr/local/bin/seamless-login ]; then
+    return 0
+  fi
+
   printf "%b\n" "${BLD}${CYE}Compilando binario de transición de bajo nivel (KD_GRAPHICS)...${CNC}"
   
   local src_tmp
@@ -37,7 +49,7 @@ if [ ! -x /usr/local/bin/seamless-login ]; then
 
 int main(int argc, char *argv[]) {
     int vt_fd;
-    int vt_num = 1; // Forzamos TTY1
+    int vt_num = 1; 
     char vt_path[32];
     
     if (argc < 2) {
@@ -52,7 +64,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     
-    // Forzar foco y activar modo gráfico para congelar la pantalla pre-boot
     ioctl(vt_fd, VT_ACTIVATE, vt_num);
     ioctl(vt_fd, VT_WAITACTIVE, vt_num);
     
@@ -74,18 +85,19 @@ int main(int argc, char *argv[]) {
 }
 CCODE
 
-  gcc -O2 -o /tmp/seamless-login "$src_tmp"
+  gcc -O2 -o /tmp/seamless-login "$src_tmp" || { log_error "Fallo la compilación en GCC"; return 1; }
   sudo mv /tmp/seamless-login /usr/local/bin/seamless-login
   sudo chmod 755 /usr/local/bin/seamless-login
   rm -f "$src_tmp"
-fi
+}
 
 # ------------------------------------------------------------------------------
 # 2. Creación del Servicio Systemd uwsmLogin Dedicado
 # ------------------------------------------------------------------------------
-printf "%b\n" "${BLD}${CYE}Inyectando uwsmLogin.service amarrado a ${REAL_USER}...${CNC}"
+inject_systemd_service() {
+  printf "%b\n" "${BLD}${CYE}Inyectando uwsmLogin.service amarrado a ${CBL}${REAL_USER}${CYE}...${CNC}"
 
-sudo tee /etc/systemd/system/uwsmLogin.service >/dev/null <<EOF
+  sudo tee /etc/systemd/system/uwsmLogin.service >/dev/null <<EOF
 [Unit]
 Description=UWSM Seamless Auto-Login (Coffee-Dots)
 After=systemd-user-sessions.service plymouth-quit-wait.service systemd-logind.service
@@ -94,7 +106,6 @@ PartOf=graphical.target
 
 [Service]
 Type=simple
-# El binario en C prepara la TTY y luego ejecuta UWSM de forma segura
 ExecStart=/usr/local/bin/seamless-login uwsm start -o hyprland.desktop
 User=${REAL_USER}
 WorkingDirectory=${REAL_HOME}
@@ -111,24 +122,39 @@ PAMName=login
 [Install]
 WantedBy=graphical.target
 EOF
+}
 
 # ------------------------------------------------------------------------------
 # 3. Conmutación y Limpieza de Servicios
 # ------------------------------------------------------------------------------
-printf "%b\n" "${BLD}${CYE}Sincronizando servicios con el gestor de arranque...${CNC}"
+finalize_services() {
+  printf "%b\n" "${BLD}${CYE}Sincronizando servicios con el gestor de arranque...${CNC}"
 
-# Limpiamos remanentes en el .zprofile si quedaron de pruebas previas
-local zprofile_target="${REAL_HOME}/.zprofile"
-if [ -f "$zprofile_target" ]; then
-  sed -i '/# \[Coffee-Dots\] Arranque automático/,/fi/d' "$zprofile_target"
-fi
+  # Limpiar remanentes en el .zprofile si quedaron de la versión anterior
+  local zprofile_target="${REAL_HOME}/.zprofile"
+  if [ -f "$zprofile_target" ]; then
+    sed -i '/# \[Coffee-Dots\] Arranque automático/,/fi/d' "$zprofile_target"
+  fi
 
-sudo systemctl daemon-reload
+  sudo systemctl daemon-reload
+  sudo systemctl disable getty@tty1.service >/dev/null 2>&1 || true
+  sudo systemctl enable uwsmLogin.service >/dev/null 2>>"$ERROR_LOG"
+}
 
-# Apagamos getty en tty1 para cederle el control total a tu binario en C
-sudo systemctl disable getty@tty1.service >/dev/null 2>&1 || true
+# ==============================================================================
+# EJECUCIÓN PRINCIPAL
+# ==============================================================================
+main() {
+  if ! command -v uwsm &>/dev/null; then
+    printf "%b\n" "${CRE}⚠️  UWSM no está instalado. Saltando configuración de autologin.${CNC}"
+    exit 0
+  fi
 
-# Activamos el servicio Seamless definitivo
-sudo systemctl enable uwsmLogin.service >/dev/null 2>>"$ERROR_LOG"
+  compile_vt_manager
+  inject_systemd_service
+  finalize_services
 
-printf "%b\n" "${CGR}✓ Transición VT en C y servicio uwsmLogin configurados con éxito.${CNC}"
+  printf "%b\n" "${CGR}v Transición VT en C y servicio uwsmLogin configurados con éxito.${CNC}"
+}
+
+main "$@"

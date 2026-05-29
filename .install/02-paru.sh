@@ -74,6 +74,7 @@ install_aur_packages() {
     "xremap-hypr-bin"
     
     # --- Estética y Tipografías de AUR ---
+    "gtk-engine-murrine"
     "yaru-gtk-theme"
     "kvantum-theme-materia"
     "ttf-cascadia-mono-nerd"
