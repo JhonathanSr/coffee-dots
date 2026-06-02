@@ -7,19 +7,20 @@ local M = {}
 -- Function to get system Node.js path (avoiding project-specific versions)
 local function get_system_node()
   -- Priority order for system Node.js (avoiding project overrides)
-  local mise_expanded = vim.fn.glob("~/.local/share/mise/installs/node/*/bin/node", false, true, true)
+  --local mise_expanded = vim.fn.glob("~/.local/share/mise/installs/node/latest/bin/node", false, true, true)
 
-  if type(mise_expanded) == "table" and #mise_expanded > 0 then
+  --if type(mise_expanded) == "table" and #mise_expanded > 0 then
     -- Ordenamos de mayor a menor para asegurar que agarre tu Node global
-    table.sort(mise_expanded, function(a, b)
-      return a > b
-    end)
-    if vim.fn.executable(mise_expanded[1]) == 1 then
-      return mise_expanded[1] -- Retorna la ruta física absoluta de tu Node v26
-    end
-  end
+  --  table.sort(mise_expanded, function(a, b)
+  --    return a > b
+  --  end)
+  --  if vim.fn.executable(mise_expanded[1]) == 1 then
+  --    return mise_expanded[1] -- Retorna la ruta física absoluta de tu Node v26
+  --  end
+  --end
 
   local system_paths = {
+    vim.fn.expand("~/.local/share/mise/installs/node/latest/bin/node"),
     vim.fn.expand("~/.nvm/versions/node/*/bin/node"), -- NVM default version
     "/usr/bin/node", -- System default,
   }

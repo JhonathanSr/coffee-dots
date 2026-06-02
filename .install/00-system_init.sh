@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # ==============================================================================
 # Fase: 00-system_init | Componente: AUR & Repositorios (coffee-dots)

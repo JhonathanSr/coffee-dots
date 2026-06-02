@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# -------------------------------------------------------------------------
+# Coffee-Dots - Screenrecording Menu (wf-recorder + Rofi + SwayOSD)
+# -------------------------------------------------------------------------
+
+# Si ya se está grabando, detenemos el proceso de forma segura
+if pkill -INT wf-recorder; then
+    if command -v swayosd-wrapper >/dev/null 2>&1; then
+        exec swayosd-wrapper --custom-icon "media-record-symbolic" --custom-message "Recording Stopped & Saved"
+    fi
+    exit 0
+fi
+
+# Configurar rutas de salida estándar
+[[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
+OUTPUT_DIR="${XDG_VIDEOS_DIR:-$HOME/Videos}/Recordings"
+[[ ! -d "$OUTPUT_DIR" ]] && mkdir -p "$OUTPUT_DIR"
+
+FILENAME="recording-$(date +'%Y-%m-%d_%H-%M-%S').mp4"
+FILEPATH="$OUTPUT_DIR/$FILENAME"
+
+# Lanzar el menú flotante con Rofi
+OPTIONS="󰹑  Fullscreen\n󰆏  Select Region\n󰍬  Fullscreen + Mic Audio"
+CHOICE=$(echo -e "$OPTIONS" | rofi -dmenu -p "Screenrecord" -theme-str 'window { width: 25%; }')
+
+case "$CHOICE" in
+    *Fullscreen)
+        # Grabación nativa de alta fidelidad
+        wf-recorder -f "$FILEPATH" >/dev/null 2>&1 &
+        ;;
+    *Region)
+        # Seleccionar área con slurp antes de iniciar
+        SELECTION=$(slurp 2>/dev/null)
+        [[ -z "$SELECTION" ]] && exit 0
+        wf-recorder -g "$SELECTION" -f "$FILEPATH" >/dev/null 2>&1 &
+        ;;
+    *Audio)
+        # Graba pantalla completa inyectando el audio por defecto de PipeWire (Pulse)
+        wf-recorder -a -f "$FILEPATH" >/dev/null 2>&1 &
+        ;;
+    *)
+        exit 0
+        ;;
+esac
+
+# Enviar confirmación visual de que la grabación inició
+if command -v swayosd-wrapper >/dev/null 2>&1; then
+    exec swayosd-wrapper --custom-icon "media-record-symbolic" --custom-message "Recording Started..."
+fi

@@ -13,3 +13,8 @@ config/zen/*/datareporting/
 config/zen/*/
 !config/zen/*/prefs.js
 !config/zen/*/user.js
+config/zsh/.zsh_history
+coffee-errors.log
+applications/icons/default/index.theme
+**/apps/steam_icon_*.png
+**/nvim/lazy-lock.json

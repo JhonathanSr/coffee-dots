@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# -----------------------------------------------------------------------------
+# Name:        monitor-watcher
+# Description: Listen to Hyprland socket events and recover monitors on removal.
+# Style:       coffee-dots ☕
+# -----------------------------------------------------------------------------
+
+# --- COFFEE BLEND (Config) ---------------------------------------------------
+SOCKET="${XDG_RUNTIME_DIR}/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.socket2.sock"
+
+# --- ROASTING LOGIC ---------------------------------------------------------
+
+# Dependency check
+if ! command -v socat &>/dev/null; then
+    echo "☕ [Error]: 'socat' is required but not installed."
+    exit 1
+fi
+
+if [ ! -S "$SOCKET" ]; then
+    echo "☕ [Error]: Hyprland socket2 not found. Is Hyprland running?"
+    exit 1
+fi
+
+# Stream events from Hyprland IPC
+socat -U - "UNIX-CONNECT:$SOCKET" | while read -r event; do
+    case "$event" in
+        monitorremoved\>\>*|monitorremovedv2\>\_*)
+            # Trigger monitor recovery scripts
+            monitor-internal recover
+            monitor-mirror recover
+            ;;
+    esac
+done

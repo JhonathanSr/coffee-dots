@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # ==============================================================================
 # SCRIPT: Core System & Official Packages Setup
@@ -75,7 +75,6 @@ install_official_packages() {
     
     # --- Herramientas de Terminal y Shell ---
     "zsh"
-    "yazi"
     "github-cli"
     "lazygit"
     "wget"
@@ -93,7 +92,9 @@ install_official_packages() {
     "jq"
     "xmlstarlet"
     "imagemagick"
-    
+    "neovim"
+    "wiremix"
+
     # --- Sistema de Archivos, Compresión y ZFS ---
     "zip"
     "tar"
@@ -116,6 +117,7 @@ install_official_packages() {
     "libva-utils"
     "ffmpegthumbnailer"
     "nautilus"
+    "nautilus-python"
     "sushi"
     
     # --- Entrada de Texto y Clipboard ---
@@ -127,6 +129,8 @@ install_official_packages() {
     # --- Captura y Grabación de Pantalla ---
     "slurp"
     "grim"
+    "wf-recorder"
+    
     
     # --- Estética, Iconos y Fuentes Base ---
     "kvantum"
@@ -148,8 +152,12 @@ install_official_packages() {
     "fd"
     "eza"
     "fzf"
+    "bat"
     "ripgrep"
     "zoxide"
+    "docker"
+    "docker-buildx"
+    "docker-compose"
   )
 
   sudo pacman -S --needed --noconfirm "${CORE_PACKAGES[@]}"

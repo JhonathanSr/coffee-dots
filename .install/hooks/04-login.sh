@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ==============================================================================
 # SCRIPT: UWSM Seamless Login Setup
 # DESCRIPCIÓN: Implementa un inicio de sesión automático "flicker-free" mediante
@@ -40,6 +40,10 @@ if ! command -v uwsm &>/dev/null; then
   echo "Instalando UWSM para gestión de sesión..."
   paru -S --noconfirm uwsm
 fi
+
+KEYRING_DIR="$HOME/.local/share/keyrings"
+KEYRING_FILE="$KEYRING_DIR/Default_keyring.keyring"
+DEFAULT_FILE="$KEYRING_DIR/default"
 
 # --- Compilación del Gestor de VT (Seamless-Login) ---
 # Este componente se encarga de preparar la TTY1 en modo gráfico (KD_GRAPHICS)
@@ -151,4 +155,3 @@ if systemctl is-enabled getty@tty1.service &>/dev/null; then
 fi
 
 printf "%b\n" "${CGR}✓ Perfil de autologin establecido con éxito.${CNC}"
-fi

@@ -1,23 +1,55 @@
 #!/usr/bin/env bash
-# ==============================================================================
-# Fase: 03-configs | Componente: Despliegue Automatizado de Dotfiles (Symlinks)
-# Descripción: Detecta dinámicamente el software en la carpeta config/ del 
-#              repositorio y mapea de forma masiva los MIME types del sistema.
-# ==============================================================================
+# -----------------------------------------------------------------------------
+# Name:        03-configs.sh
+# Description: Dynamic dotfiles deployment, MIME types mapping, and ZDOTDIR PATH setup.
+# Style:       coffee-dots ☕
+# -----------------------------------------------------------------------------
 
+# --- COFFEE BLEND (Colors & Variables) ---------------------------------------
 CRE=$(tput setaf 1); CYE=$(tput setaf 3); CGR=$(tput setaf 2); CBL=$(tput setaf 4); BLD=$(tput bold); CNC=$(tput sgr0)
 ERROR_LOG="$HOME/coffee-dots/coffee-errors.log"
 REAL_USER="${SUDO_USER:-$(logname 2>/dev/null || echo "$USER")}"
 REAL_HOME=$(eval echo "~$REAL_USER")
 
-# Rutas base del ecosistema coffee-dots
+# Base paths for the ecosystem
 REPO_CONFIG_DIR="${REAL_HOME}/coffee-dots/config"
 TARGET_CONFIG_DIR="${REAL_HOME}/.config"
+COFFEE_BIN_DIR="${TARGET_CONFIG_DIR}/coffee"
+
+# Zsh Custom Paths Configuration
+ZSHENV_FILE="${REAL_HOME}/.zshenv"
+ZSH_CONFIG_DIR="${TARGET_CONFIG_DIR}/zsh"
+ZSHRC_FILE="${ZSH_CONFIG_DIR}/.zshrc"
 
 trap 'printf "%s%sERROR:%s Fallo en despliegue de configuraciones (Línea $LINENO)\n" "${CRE}" "${BLD}" "${CNC}" >&2' ERR
 
 # ------------------------------------------------------------------------------
-# Vinculación Simbólica Quirúrgica y Segura
+# Configuración del Entorno Zsh y PATH (~/.config/zsh)
+# ------------------------------------------------------------------------------
+setup_zsh_and_path() {
+  printf "%b\n" "${BLD}${CYE}Configurando entorno Zsh personalizado ($ZDOTDIR) y PATH...${CNC}"
+  
+  # 1. Asegurar que Zsh busque sus configs en ~/.config/zsh
+  local zshenv_line='export ZDOTDIR="$HOME/.config/zsh"'
+  if [ -f "$ZSHENV_FILE" ]; then
+    if ! grep -Fxq "$zshenv_line" "$ZSHENV_FILE"; then
+      printf "\n# Added by coffee-dots ☕\n%s\n" "$zshenv_line" >> "$ZSHENV_FILE"
+    fi
+  else
+    printf "# Added by coffee-dots ☕\n%s\n" "$zshenv_line" > "$ZSHENV_FILE"
+  fi
+  printf "%b\n" "${CGR}✓ Redirección ZDOTDIR configurada en ~/.zshenv${CNC}"
+
+  # 2. Asegurar que exista la carpeta destino del binario coffee
+  mkdir -p "$COFFEE_BIN_DIR"
+  mkdir -p "$ZSH_CONFIG_DIR"
+
+  # 3. Instalar zap
+  zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --keep
+}
+
+# ------------------------------------------------------------------------------
+# Vinculación Simbólica
 # ------------------------------------------------------------------------------
 create_symlink() {
   local source_path="$1"
@@ -38,7 +70,7 @@ create_symlink() {
 }
 
 # ------------------------------------------------------------------------------
-# Despliegue por Autodetección Dinámica (Mantenimiento Cero)
+# Despliegue por Autodetección Dinámica
 # ------------------------------------------------------------------------------
 deploy_dotfiles() {
   printf "%b\n" "${BLD}${CYE}Iniciando mapeo dinámico de coffee-dots...${CNC}"
@@ -66,7 +98,7 @@ deploy_dotfiles() {
 }
 
 # ------------------------------------------------------------------------------
-# Mapeo Masivo de Mimetypes (Asociaciones de tu suite de Apps)
+# Mapeo Masivo de Mimetypes
 # ------------------------------------------------------------------------------
 setup_mimetypes() {
   if ! command -v xdg-mime &>/dev/null; then
@@ -75,19 +107,14 @@ setup_mimetypes() {
 
   printf "%b\n" "${BLD}${CYE}Estableciendo asociaciones masivas de archivos (Mimetypes)...${CNC}"
 
-  # 1. Directorios -> Ghostty
   sudo -u "${REAL_USER}" xdg-mime default org.gregorykoehler.ghostty.desktop inode/directory || true
-
-  # 2. Documentos PDF -> Evince
   sudo -u "${REAL_USER}" xdg-mime default org.gnome.Evince.desktop application/pdf || true
 
-  # 3. Imágenes -> imv (Visor ligero de tu lista base)
   local img_types=(image/png image/jpeg image/gif image/webp image/bmp image/tiff)
   for type in "${img_types[@]}"; do
     sudo -u "${REAL_USER}" xdg-mime default imv.desktop "$type" || true
   done
 
-  # 4. Video y Multimedia -> mpv
   local video_types=(
     video/mp4 video/x-msvideo video/x-matroska video/x-flv video/x-ms-wmv 
     video/mpeg video/ogg video/webm video/quicktime video/3gpp video/3gpp2 
@@ -97,7 +124,6 @@ setup_mimetypes() {
     sudo -u "${REAL_USER}" xdg-mime default mpv.desktop "$type" || true
   done
 
-  # 5. Código y Texto Plano -> Neovim
   local text_types=(
     text/plain text/english text/x-makefile text/x-c++hdr text/x-c++src 
     text/x-chdr text/x-csrc text/x-java text/x-moc text/x-pascal text/x-tcl 
@@ -116,29 +142,25 @@ setup_mimetypes() {
 main() {
   mkdir -p "$TARGET_CONFIG_DIR"
 
+  setup_zsh_and_path
   deploy_dotfiles
   setup_mimetypes
 
+  # Lanzadores (.desktop)
+  ln -s "$REAL_HOME/coffee-dots/applications/"*.desktop "$REAL_HOME/.local/share/applications" 2>/dev/null || true
+  ln -s "$REAL_HOME/coffee-dots/applications/hidden/"*.desktop "$REAL_HOME/.local/share/applications" 2>/dev/null || true
 
-# --- Despliegue de Lanzadores (.desktop) ---
-# Copiamos los archivos de escritorio personalizados y los ocultos para 
-# limpiar el menú de aplicaciones y mejorar la integración con el sistema.
-  ln -s "$HOME/coffee-dots/applications/"*.desktop ~/.local/share/applications
-  ln -s "$HOME/coffee-dots/applications/hidden/"*.desktop ~/.local/share/applications
+  # Recursos Visuales para Lanzadores
+  ln -s "$REAL_HOME/coffee-dots/applications/icons" "$REAL_HOME/.local/share/" 2>/dev/null || true
 
-# --- Recursos Visuales para Lanzadores ---
-# Corregimos la falta de iconos en Walker u otros lanzadores TUI/GUI 
-# moviendo los activos necesarios al directorio local del usuario.
-  ln -s "$HOME/coffee-dots/applications/icons" ~/.local/share/
-
-# --- Finalización y Actualización ---
-# Refrescamos la base de datos de aplicaciones para que los cambios en los 
-# archivos .desktop y las asociaciones MIME se apliquen de inmediato.
-  update-desktop-database ~/.local/share/applications
-
+  # Refrescar base de datos de escritorio
+  update-desktop-database "$REAL_HOME/.local/share/applications" 2>/dev/null || true
   
+  # Corrección final de dueños en las rutas modificadas
   chown -R "${REAL_USER}:${REAL_USER}" "$TARGET_CONFIG_DIR"
-  printf "\n%b\n" "${CGR}✓ [Fase 3] Despliegue de entorno y mimetypes completado con éxito.${CNC}"
+  chown "$REAL_USER:$REAL_USER" "$ZSHENV_FILE" 2>/dev/null || true
+  
+  printf "\n%b\n" "${CGR}✓ [Fase 3] Despliegue de entorno, Zsh modular y mimetypes completado con éxito.${CNC}"
 }
 
 main "$@"

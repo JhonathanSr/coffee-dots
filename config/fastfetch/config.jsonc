@@ -2,8 +2,9 @@
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
     "type": "file",
-    "source": "~/.config/omarchy/branding/about.txt",
-    "color": { "1": "green" },
+    "color": {
+      "1": "green"
+    },
     "padding": {
       "top": 2,
       "right": 6,
@@ -11,10 +12,15 @@
     }
   },
   "modules": [
-    "break",
     {
       "type": "custom",
-      "format": "\u001b[90m┌──────────────────────Hardware──────────────────────┐"
+      "format": "\u001b[90m┌──────────────────────Hadware──────────────────────┐"
+    },
+    {
+      "type": "title",
+      "key": "├─",
+      "format": "{user-name}",
+      "keyColor": "yellow"
     },
     {
       "type": "host",
@@ -39,18 +45,26 @@
       "keyColor": "green"
     },
     {
-      "type": "disk",
-      "key": "│ ├󰋊",
-      "keyColor": "green"
-    },
-    {
       "type": "memory",
+      "format": "[{3}] {1} / {2}",
       "key": "│ ├",
       "keyColor": "green"
     },
     {
       "type": "swap",
-      "key": "└ └󰓡 ",
+      "format": "[{3}] {1} / {2}",
+      "key": "│ ├󰓡",
+      "keyColor": "green"
+    },
+    {
+      "type": "disk",
+      "format": "[{3}] {1} / {2} {9}",
+      "key": "│ ├",
+      "keyColor": "magenta"
+    },
+    {
+      "type": "gamepad",
+      "key": "└ └",
       "keyColor": "green"
     },
     {
@@ -63,22 +77,9 @@
       "format": "\u001b[90m┌──────────────────────Software──────────────────────┐"
     },
     {
-      "type": "command",
-      "key": "\ue900 OS",
-      "keyColor": "blue",
-      "text": "version=$(omarchy-version); echo \"Omarchy $version\""
-    },
-    {
-      "type": "command",
-      "key": "│ ├󰘬",
-      "keyColor": "blue",
-      "text": "branch=$(omarchy-version-branch); echo \"$branch\""
-    },
-    {
-      "type": "command",
-      "key": "│ ├󰔫",
-      "keyColor": "blue",
-      "text": "channel=$(omarchy-version-channel); echo \"$channel\""
+      "type": "os",
+      "key": "├─", // Just get your distro's logo off nerdfonts.com
+      "keyColor": "blue"
     },
     {
       "type": "kernel",
@@ -86,14 +87,9 @@
       "keyColor": "blue"
     },
     {
-      "type": "wm",
-      "key": "│ ├",
-      "keyColor": "blue"
-    },
-    {
       "type": "de",
-      "key": " DE",
-      "keyColor": "blue"
+      "key": "├─",
+      "keyColor": "yellow"
     },
     {
       "type": "terminal",
@@ -101,8 +97,8 @@
       "keyColor": "blue"
     },
     {
-      "type": "packages",
-      "key": "│ ├󰏖",
+      "type": "shell",
+      "key": "│ ├",
       "keyColor": "blue"
     },
     {
@@ -114,7 +110,7 @@
       "type": "command",
       "key": "│ ├󰸌",
       "keyColor": "blue",
-      "text": "theme=$(omarchy-theme-current); echo -e \"$theme \\e[38m●\\e[37m●\\e[36m●\\e[35m●\\e[34m●\\e[33m●\\e[32m●\\e[31m●\""
+      "text": "echo -e \"\\e[38m●\\e[37m●\\e[36m●\\e[35m●\\e[34m●\\e[33m●\\e[32m●\\e[31m●\""
     },
     {
       "type": "terminalfont",
@@ -150,7 +146,6 @@
     {
       "type": "custom",
       "format": "\u001b[90m└────────────────────────────────────────────────────┘"
-    },
-    "break"
+    }
   ]
 }

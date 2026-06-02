@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# -------------------------------------------------------------------------
+# Coffee-Dots - SwayOSD Monitor Wrapper
+# -------------------------------------------------------------------------
+# Envía eventos a swayosd-client forzando el renderizado en el monitor enfocado.
+
+# 1. Verificación Defensiva Nativa: ¿Está el servicio de usuario corriendo?
+if ! systemctl --user is-active --quiet swayosd-server.service; then
+    # Si no está activo, lo levantamos on-the-fly
+    systemctl --user start swayosd-server.service >/dev/null 2>&1
+  
+fi
+
+# 2. Lógica de Hyprland para inyectar el monitor enfocado
+if hyprctl monitors -j | jq -e '.[] | select(.focused == true)' >/dev/null 2>&1; then
+    MONITOR_NAME=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name')
+    exec swayosd-client --monitor "$MONITOR_NAME" "$@"
+else
+    # Fallback defensivo si hyprctl/jq fallan o no hay monitor en foco detectable
+    exec swayosd-client "$@"
+fi

@@ -57,29 +57,30 @@ install_aur_packages() {
     "zellij"
     "mise"
     "lazydocker"
-    "gum" 
     "python-terminaltexteffects"
     "tzupdate"
-    
+
     # --- Aplicaciones de Escritorio y Productividad ---
     "zen-browser-bin"
     "localsend"
     "obsidian"
     "satty"
     "wl-screenrec"
-    
-    # --- Hardware, Comunicaciones y Teclado ---
+
+    # --- Hardware, Comunicaciones y Teclado ---a
     "impala" # Gestión WiFi TUI
     "bluetui"
     "xremap-hypr-bin"
-    
+
     # --- Estética y Tipografías de AUR ---
-    "gtk-engine-murrine"
+    "nwg-look-flatpak-git"
+    "gnome-themes-extra"
+    "gtk-engine-murrine-git"
     "yaru-gtk-theme"
     "kvantum-theme-materia"
     "ttf-cascadia-mono-nerd"
     "ttf-ia-writer"
-    
+
     # --- Compresores específicos obsoletos/AUR ---
     "7zip"
     "bzip3"

@@ -11,3 +11,15 @@ if [ -f "/etc/pam.d/system-auth" ]; then
   sudo sed -i 's|^\(auth\s\+\[default=die\]\s\+pam_faillock.so\)\s\+authfail.*$|\1 authfail deny=10 unlock_time=60|' "/etc/pam.d/system-auth"
   printf "%b\n" "${CGR}✓ Políticas PAM aplicadas.${CNC}"
 fi
+
+# generando keyring vacio
+  printf "%b\n" "${BLD}${CYE}Generando Keyring ..${CNC}"
+if [ ! -f "$HOME/.local/share/keyrings/login.keyring" ]; then
+    mkdir -p "$HOME/.local/share/keyrings"
+  
+    echo "" | gnome-keyring-daemon --unlock --components=secrets &>/dev/null
+    echo "login" > "$HOME/.local/share/keyrings/default"
+fi
+
+
+printf "%b\n" "${CGR}✓ Politicas de autenticación endurecidas.${CNC}"

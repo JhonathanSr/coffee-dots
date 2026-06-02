@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# -------------------------------------------------------------------------
+# Coffee-Dots - Workspace Layout Switcher & OSD Sync
+# -------------------------------------------------------------------------
+
+# 1. Obtener datos del workspace activo en una sola llamada de hyprctl
+WORKSPACE_DATA=$(hyprctl activeworkspace -j)
+ACTIVE_WORKSPACE=$(echo "$WORKSPACE_DATA" | jq -r '.id')
+CURRENT_LAYOUT=$(echo "$WORKSPACE_DATA" | jq -r '.tiledLayout')
+
+# 2. Alternar el estado del layout
+case "$CURRENT_LAYOUT" in
+  dwindle) NEW_LAYOUT="scrolling" ;;
+  *)       NEW_LAYOUT="dwindle" ;;
+esac
+
+# 3. Aplicar el cambio usando la palabra clave nativa de Hyprland
+hyprctl keyword workspace "$ACTIVE_WORKSPACE, layout:$NEW_LAYOUT" >/dev/null
+
+# 4. Asignar iconos limpios para SwayOSD según el layout
+if [[ "$NEW_LAYOUT" == "scrolling" ]]; then
+  OSD_ICON="view-wrapped-symbolic"
+else
+  OSD_ICON="view-grid-symbolic"
+fi
+
+# 5. Despachar la notificación al wrapper del PATH
+if command -v swayosd-wrapper >/dev/null 2>&1; then
+  exec swayosd-wrapper --custom-icon "$OSD_ICON" --custom-message "Layout: $NEW_LAYOUT"
+else
+  exec swayosd-client --custom-icon "$OSD_ICON" --custom-message "Layout: $NEW_LAYOUT"
+fi

@@ -2,6 +2,25 @@
 
 return {
   {
+    "neovim/nvim-lspconfig",
+    opts = {
+      setup = {
+        -- Configuración para evitar comas finales en JavaScript/TypeScript
+        vtsls = function(_, opts)
+          opts.settings = opts.settings or {}
+          opts.settings.javascript = { preferences = { trailingCommas = "none" } }
+          opts.settings.typescript = { preferences = { trailingCommas = "none" } }
+        end,
+        -- Configuración específica para el LSP de JSON
+        jsonls = function(_, opts)
+          opts.settings = opts.settings or {}
+          opts.settings.json = opts.settings.json or {}
+          opts.settings.json.format = { enable = false } -- Deja que Prettier se encargue por completo
+        end,
+      },
+    },
+  },
+  {
     -- Plugin: goto-preview
     -- URL: https://github.com/rmagatti/goto-preview
     -- Description: Provides preview functionality for definitions, declarations, implementations, type definitions, and references.

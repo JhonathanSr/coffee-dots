@@ -10,6 +10,7 @@ git config --global alias.ci commit
 git config --global alias.st status
 
 git config --global pull.rebase true
-git config --global init.defaultBranch master
+git config --global init.defaultBranch main
+git config --global core.editor nvim
 
 printf "%b\n" "${CGR}✓ Aliases de Git configurados correctamente.${CNC}"

@@ -4,4 +4,8 @@ return {
   --   "CopilotC-Nvim/CopilotChat.nvim",
   --   enabled = false,
   -- },
+  {
+    "obsidian-nvim/obsidian.nvim",
+    enabled = false,
+  },
 }
