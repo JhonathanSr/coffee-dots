@@ -64,7 +64,7 @@ install_official_packages() {
     "hyprpaper"
     "rofi"
     "hyprpolkitagent"
-    
+
     # --- Base de Compilación (Build Essentials) ---
     "gcc"
     "cmake"
@@ -72,7 +72,7 @@ install_official_packages() {
     "ninja"
     "clang"
     "llvm"
-    
+
     # --- Herramientas de Terminal y Shell ---
     "zsh"
     "github-cli"
@@ -102,7 +102,7 @@ install_official_packages() {
     "xz"
     "zstd"
     "cpio"
-    
+
     # --- Multimedia, Audio y Control de Hardware ---
     "mpv"
     "imv"
@@ -119,19 +119,18 @@ install_official_packages() {
     "nautilus"
     "nautilus-python"
     "sushi"
-    
+
     # --- Entrada de Texto y Clipboard ---
     "fcitx5"
     "fcitx5-gtk"
     "fcitx5-configtool"
     "wl-clipboard"
-    
+
     # --- Captura y Grabación de Pantalla ---
     "slurp"
     "grim"
     "wf-recorder"
-    
-    
+
     # --- Estética, Iconos y Fuentes Base ---
     "kvantum"
     "gnome-themes-extra"
@@ -158,6 +157,8 @@ install_official_packages() {
     "docker"
     "docker-buildx"
     "docker-compose"
+    "kdeconnect"
+    "sshfs"
   )
 
   sudo pacman -S --needed --noconfirm "${CORE_PACKAGES[@]}"
@@ -165,7 +166,7 @@ install_official_packages() {
 
 activate_system_timers() {
   printf "\n%b\n" "${BLD}${CYE}Activando servicios y timers de indexación (CachyOS)...${CNC}"
-  
+
   # Intentar activar primero el timer optimizado de CachyOS
   if sudo systemctl enable --now plocate-driven-updatedb.timer >/dev/null 2>>"$ERROR_LOG"; then
     printf "%b\n" "${CGR}✓ Timer plocate-driven-updatedb activado.${CNC}"

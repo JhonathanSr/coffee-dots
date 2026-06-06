@@ -41,10 +41,14 @@ hl.monitor({
 ---------------------
 
 -- Set programs that you use
+
+-- Obtener el directorio HOME del usuario actual
+local home = os.getenv("HOME")
+local rofi_scripts = home .. "/.config/rofi/scripts/"
+
 local terminal = "ghostty"
 local tui_launcher = 'uwsm app -- ghostty --title="tui" -e '
 local fileManager = "nautilus"
-local menu = "rofi -show drun -show-icons"
 local browser = "zen-browser"
 local visual = "code"
 local editor = "uwsm app -- ghostty -e nvim"
@@ -105,6 +109,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("systemctl --user enable --now docker.service")
 	-- 5. Configuraciones estéticas de Hyprland
 	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
+	hl.exec_cmd("uwsm-app -- kdeconnectd")
 end)
 
 -----------------------
@@ -135,7 +140,7 @@ hl.config({
 		gaps_in = 2,
 		gaps_out = 1,
 
-		border_size = 2,
+		border_size = 1,
 
 		col = {
 			active_border = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
@@ -357,7 +362,8 @@ hl.bind(
 -- Apps
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(editor))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(rofi_scripts .. "launcher_t1"))
+hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd(rofi_scripts .. "powermenu_t2"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(visual))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(tui_launcher .. docker))
@@ -372,12 +378,10 @@ hl.bind(secondMainmod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "maximized" }))
 hl.bind(secondMainmod .. " + J", hl.dsp.layout("togglesplit"))
 
-
-
-hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
-hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
+hl.bind(mainMod .. " + LEFT", hl.dsp.focus({ direction = "left" }))
+hl.bind(mainMod .. " + RIGHT", hl.dsp.focus({ direction = "right" }))
+hl.bind(mainMod .. " + UP", hl.dsp.focus({ direction = "up" }))
+hl.bind(mainMod .. " + DOWN", hl.dsp.focus({ direction = "down" }))
 --hl.bind(secondMainmod .. " + L", hl.dsp.window.move({ direction = "right" }))
 --hl.bind(secondMainmod .. " + K", hl.dsp.window.move({ direction = "up" }))
 --hl.bind(secondMainmod .. " + H", hl.dsp.window.move({ direction = "left" }))
@@ -509,14 +513,8 @@ hl.bind("XF86TouchpadOn", hl.dsp.exec_cmd(bin_path .. "touchpad-toggle on"), { l
 hl.bind("XF86TouchpadOff", hl.dsp.exec_cmd(bin_path .. "touchpad-toggle off"), { locked = true })
 
 -- Screenshots and screen recording.
-hl.bind("PRINT", hl.dsp.exec_cmd(bin_path .. "screenshot"))
+--hl.bind("PRINT", hl.dsp.exec_cmd(bin_path .. "screenshot"))
 hl.bind("PRINT", hl.dsp.exec_cmd(bin_path .. "screenshot smart slurp"))
--- Captura de pantalla completa del monitor enfocado
-hl.bind("SHIFT + PRINT", hl.dsp.exec_cmd(bin_path .. "screenshot fullscreen slurp"))
--- Captura directa al portapapeles sin guardar archivo (Rápida)
-hl.bind("CTRL + PRINT", hl.dsp.exec_cmd(bin_path .. "screenshot smart copy"))
--- Captura seleccionando ventanas interactivamente con bordes de slurp
-hl.bind("SUPER + PRINT", hl.dsp.exec_cmd(bin_path .. "screenshot windows slurp"))
 
 --hl.bind("ALT + PRINT", hl.dsp.exec_cmd("screenrecord"))
 
@@ -554,6 +552,9 @@ end)
 
 -- See https://wiki.hypr.land/Configuring/Basics/Window-Rules/
 -- and https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
+
+--https://wiki.hypr.land/Configuring/Basics/Window-Rules/#layer-rules
+hl.layer_rule({ match = { namespace = "waybar" }, blur = true })
 
 -- Example window rules that are useful
 
@@ -610,6 +611,17 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "power",
+	match = {
+		title = "power",
+	},
+	float = true,
+	fullscreen = false,
+	center = true,
+	size = { "(monitor_w*0.1)", "(monitor_h*0.1)" },
+})
+
+hl.window_rule({
 	name = "steam.*",
 	match = {
 		class = "steam.*",
@@ -646,6 +658,17 @@ hl.window_rule({
 	name = "xdg-desktop-portal-gtk",
 	match = {
 		class = "xdg-desktop-portal-gtk",
+	},
+	float = true,
+	fullscreen = false,
+	center = true,
+	size = { "(monitor_w*0.6)", "(monitor_h*0.6)" },
+})
+
+hl.window_rule({
+	name = "KDE connect",
+	match = {
+		class = "org.kde.kdeconnect.*",
 	},
 	float = true,
 	fullscreen = false,

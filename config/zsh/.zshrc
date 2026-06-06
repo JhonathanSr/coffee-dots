@@ -19,7 +19,8 @@ export EDITOR="nvim"
 export BROWSER="zen-browser"
 export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 export BAT_THEME="base16"
-export PATH="$HOME/.config/coffee:$PATH"
+export PATH=$HOME/.config/coffee:$PATH
+export PATH=$HOME/.config/rofi/scripts:$PATH
 
 # Optimización para Radeon RX 6600 XT (RDNA 2)
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
@@ -104,6 +105,18 @@ alias ls='eza --icons=always --color=always -a'
 alias ll='eza --icons=always --color=always -la'
 alias tf='cd ~/Work/Repositorio/Frontend/'
 alias tb='cd ~/Work/Repositorio/Backend/'
+
+alias -s md="bat"
+alias -s js="$EDITOR"
+alias -s ts="$EDITOR"
+alias -s yaml="$EDITOR"
+
+alias -g NE='2>/dev/null'
+alias -g ND='>/dev/null'
+alias -g NUL='>/dev/null 2>1'
+alias -g JQ='| jq'
+alias -g C='| wl-copy'
+alias -g L='| less'
 
 function y() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd

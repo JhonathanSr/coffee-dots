@@ -1,47 +1,55 @@
 #!/usr/bin/env bash
-#
-# Launch a power menu
-#
-# Requires fzf and systemd (loginctl, systemctl)
-#
-# Author:  Jesse Mirabel <sejjymvm@gmail.com>
-# Date:    August 19, 2025
-# License: MIT
 
 main() {
-	local list=(
-		"Lock"
-		"Shutdown"
-		"Reboot"
-		"Logout"
-		"Hibernate"
-		"Suspend"
-	)
+  # 1. Patrón Singleton (Toggle)
+  # Buscamos si ya hay un proceso de rofi corriendo este script específico
+  local previous_pid
+  previous_pid=$(pgrep -f "rofi.*power-menu" | grep -v "$$")
 
-	local options=(
-		"--border=sharp"
-		"--border-label= Power Menu "
-		"--cycle"
-		"--ghost=Search"
-		"--height=~100%"
-		"--highlight-line"
-		"--info=inline-right"
-		"--pointer="
-		"--reverse"
-	)
+  if [ -n "$previous_pid" ]; then
+    kill -9 "$previous_pid"
+    # Forzamos a Rofi a cerrar cualquier menú activo en la pantalla
+    pkill rofi
+    exit 0
+  fi
 
-	local selected
-	selected=$(printf "%s\n" "${list[@]}" | fzf "${options[@]}")
+  # 2. Definición de opciones
+  local list=(
+    "Lock"
+    "Shutdown"
+    "Reboot"
+    "Logout"
+    "Hibernate"
+    "Suspend"
+  )
 
-	case $selected in
-		Lock)      loginctl lock-session ;;
-		Shutdown)  systemctl poweroff ;;
-		Reboot)    systemctl reboot ;;
-		Logout)    loginctl terminate-session "$XDG_SESSION_ID" ;;
-		Hibernate) systemctl hibernate ;;
-		Suspend)   systemctl suspend ;;
-		*)         return 1 ;;
-	esac
+  # Convertimos el array en una cadena separada por saltos de línea
+  local items
+  items=$(printf "%s\n" "${list[@]}")
+
+  # 3. Renderizado con Rofi
+  # -dmenu activa el modo selección, -p cambia el prompt, -i ignora mayúsculas/minúsculas
+  local selected
+  selected=$(
+    echo "$items" | rofi -dmenu -p "Power Menu" -i \
+      -theme-str 'inputbar { enabled: false; } 
+                window { width: 300px;  
+                         lines: 6; 
+                         location: center; 
+                         anchor: center;  }
+                element-text {x-aling: 0.5;}'
+  )
+
+  # 4. Ejecución de acciones
+  case $selected in
+  Lock) loginctl lock-session ;;
+  Shutdown) systemctl poweroff ;;
+  Reboot) systemctl reboot ;;
+  Logout) loginctl terminate-session "$XDG_SESSION_ID" ;;
+  Hibernate) systemctl hibernate ;;
+  Suspend) systemctl suspend ;;
+  *) exit 0 ;; # Si presionas ESC o das click fuera, cierra limpio
+  esac
 }
 
 main

@@ -85,6 +85,11 @@ install_aur_packages() {
     "7zip"
     "bzip3"
     "arj"
+
+    "inotify-tools"
+    "python-setuptools"
+    "zscroll-git"
+    "gitflow-avh"
   )
 
   # Ejecución de Paru delegando el logging de errores
