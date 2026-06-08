@@ -10,51 +10,58 @@ INTERNAL=$(hyprctl monitors -j | jq -r '.[] | select(.name | ascii_downcase | co
 TOTAL_MONITORS=$(hyprctl monitors -j | jq '. | length')
 
 if [[ -z "$INTERNAL" ]]; then
-    echo "No se detectó la pantalla interna de la laptop." >&2
-    exit 1
+  echo "No se detectó la pantalla interna de la laptop." >&2
+  exit 1
 fi
 
 on() {
-    # Volver a encender la pantalla interna en modo automático preferido
-    hyprctl keyword monitor "$INTERNAL, preferred, auto, 1" >/dev/null
-    rm -f "$STATE_FILE"
+  # Volver a encender la pantalla interna en modo automático preferido
+  #
+  hyprctl dispatch 'hl.dsp.dpms({ action = "enable",monitor="'"$INTERNAL"'" })'
+  #hyprctl keyword monitor "$INTERNAL, preferred, auto, 1" >/dev/null
+  rm -f "$STATE_FILE"
 
-    if command -v swayosd-wrapper >/dev/null 2>&1; then
-        exec swayosd-wrapper --custom-icon "video-display-symbolic" --custom-message "Laptop display: ON"
-    fi
+  if command -v swayosd-wrapper >/dev/null 2>&1; then
+    exec swayosd-wrapper --custom-icon "video-display-symbolic" --custom-message "Laptop display: ON"
+  fi
 }
 
 off() {
-    # Validación defensiva: Si solo hay 1 monitor activo, no permitimos apagarlo
-    if (( TOTAL_MONITORS <= 1 )); then
-        if command -v swayosd-wrapper >/dev/null 2>&1; then
-            exec swayosd-wrapper --custom-icon "dialog-warning-symbolic" --custom-message "Can't disable the only active display"
-        fi
-        exit 1
-    fi
+  # Validación defensiva: Si solo hay 1 monitor activo, no permitimos apagarlo
+  if ((TOTAL_MONITORS <= 1)); then
+    # if command -v swayosd-wrapper >/dev/null 2>&1; then
+    #     exec swayosd-wrapper --custom-icon "dialog-warning-symbolic" --custom-message "Can't disable the only active display"
+    # fi
+    loginctl lock-session
+    systemctl suspend
 
-    # Deshabilitar la pantalla interna nativamente
-    hyprctl keyword monitor "$INTERNAL, disable" >/dev/null
-    touch "$STATE_FILE"
+    exit 0
+  fi
 
-    if command -v swayosd-wrapper >/dev/null 2>&1; then
-        exec swayosd-wrapper --custom-icon "video-display-symbolic" --custom-message "Laptop display: OFF"
-    fi
+  # Deshabilitar la pantalla interna nativament
+  hyprctl dispatch 'hl.dsp.dpms({ action = "disable",monitor="'"$INTERNAL"'" })' && hyprctl reload
+  #hyprctl keyword monitor "$INTERNAL, disable" >/dev/null
+
+  touch "$STATE_FILE"
+
+  if command -v swayosd-wrapper >/dev/null 2>&1; then
+    exec swayosd-wrapper --custom-icon "video-display-symbolic" --custom-message "Laptop display: OFF"
+  fi
 }
 
 # 2. Controlar el flujo según el estado actual o argumento
 case "${1:-toggle}" in
-    on)  on ;;
-    off) off ;;
-    toggle)
-        if [[ -f "$STATE_FILE" ]]; then
-            on
-        else
-            off
-        fi
-        ;;
-    *)
-        echo "Usage: $(basename "$0") {on|off|toggle}" >&2
-        exit 1
-        ;;
+on) on ;;
+off) off ;;
+toggle)
+  if [[ -f "$STATE_FILE" ]]; then
+    on
+  else
+    off
+  fi
+  ;;
+*)
+  echo "Usage: $(basename "$0") {on|off|toggle}" >&2
+  exit 1
+  ;;
 esac

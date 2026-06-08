@@ -13,9 +13,10 @@ fi
 
 # 2. Remover timeouts molestos
 printf "%b\n" "${BLD}${CYE}Removiendo retrasos (wait-online) de red en el arranque...${CNC}"
-local services=("systemd-networkd-wait-online.service" "NetworkManager-wait-online.service")
-for service in "${services[@]}"; do
-  sudo systemctl disable "$service" >/dev/null 2>>"$ERROR_LOG" || true
-  sudo systemctl mask "$service" >/dev/null 2>>"$ERROR_LOG" || true
+for service in systemd-networkd-wait-online.service NetworkManager-wait-online.service; do
+  if systemctl list-unit-files "$service" >/dev/null 2>&1; then
+	sudo systemctl disable "$service" >>"$ERROR_LOG" || true
+        sudo systemctl mask "$service" >>"$ERROR_LOG" || true
+  fi
 done
 printf "%b\n" "${CGR}✓ Optimización de red y boot completada.${CNC}"

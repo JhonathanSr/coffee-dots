@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 # Componente: Hardening de Autenticación (PAM)
 
-CRE=$(tput setaf 1); CYE=$(tput setaf 3); CGR=$(tput setaf 2); BLD=$(tput bold); CNC=$(tput sgr0)
+CRE=$(tput setaf 1)
+CYE=$(tput setaf 3)
+CGR=$(tput setaf 2)
+BLD=$(tput bold)
+CNC=$(tput sgr0)
 ERROR_LOG="$HOME/coffee-dots/coffee-errors.log"
 trap 'printf "%s%sERROR:%s Fallo en PAM hardening (Línea $LINENO)\n" "${CRE}" "${BLD}" "${CNC}" >&2' ERR
 
@@ -13,13 +17,12 @@ if [ -f "/etc/pam.d/system-auth" ]; then
 fi
 
 # generando keyring vacio
-  printf "%b\n" "${BLD}${CYE}Generando Keyring ..${CNC}"
+printf "%b\n" "${BLD}${CYE}Generando Keyring ..${CNC}"
 if [ ! -f "$HOME/.local/share/keyrings/login.keyring" ]; then
-    mkdir -p "$HOME/.local/share/keyrings"
-  
-    echo "" | gnome-keyring-daemon --unlock --components=secrets &>/dev/null
-    echo "login" > "$HOME/.local/share/keyrings/default"
-fi
+  mkdir -p "$HOME/.local/share/keyrings"
 
+  echo "" | gnome-keyring-daemon --unlock --components=secrets &>/dev/null
+  echo "login" >"$HOME/.local/share/keyrings/default"
+fi
 
 printf "%b\n" "${CGR}✓ Politicas de autenticación endurecidas.${CNC}"

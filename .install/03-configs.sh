@@ -141,6 +141,9 @@ setup_mimetypes() {
 # ------------------------------------------------------------------------------
 main() {
   mkdir -p "$TARGET_CONFIG_DIR"
+  
+  mise use --global node
+
 
   setup_zsh_and_path
   deploy_dotfiles

@@ -21,14 +21,18 @@ tooltip label {
   font-size: 14px;
 }
 
-#custom-left_inv,
-#custom-right_inv {
-  font-size: 22px;
-}
-#custom-left_div,
-#custom-right_div{
-  font-size: 18px;
-}
+#custom-powerprofile {
+  font-family: "Font Awesome 6 Free";
+  font-size: 14px;
+  padding: 0 12px;
+} /* #custom-left_inv, */
+/* #custom-right_inv { */
+/*   font-size: 18px; */
+/* } */
+/* #custom-left_div, */
+/* #custom-right_div{ */
+/*   font-size: 18px; */
+/* } */
 
 .module {
   margin-bottom: -1px;
@@ -93,17 +97,23 @@ tooltip > box {
     Workspaces
 ----------------*/
 #workspaces {
-  padding: 0 1px;
+  padding: 6px 0;
+  margin: 1.5px 0;
   background-color: @workspaces;
 }
 
-#workspaces button.active label,
-#workspaces button.focused label {
-  color: @accent;
+#workspaces button {
+  all: initial;
+  padding: 0 6px;
+  margin: 0 1.5px;
+  min-width: 9px;
+  font-size: 14px;
 }
 
-#workspaces button.active label,
-#workspaces button.focused label,
+#workspaces button.empty {
+  opacity: 0.5;
+}
+
 #custom-distro {
   font-size: 14px;
 }
@@ -175,25 +185,14 @@ tooltip > box {
 /*-------------
     Battery
 -------------*/
-
-#custom-left_div.8 {
-  background-color: @backlight;
-  color: @battery;
-}
 #battery {
   background-color: @battery;
-}
-#custom-left_inv.2 {
-  color: @battery;
-}
 
+  font-size: 14px;
+}
 /*-----------------
     Temperature
 -----------------*/
-
-#custom-left_div.2 {
-  color: @temperature;
-}
 #temperature {
   background-color: @temperature;
 }
@@ -201,11 +200,6 @@ tooltip > box {
 /*------------
     Memory
 ------------*/
-
-#custom-left_div.3 {
-  background-color: @temperature;
-  color: @memory;
-}
 #memory {
   background-color: @memory;
 }
@@ -216,14 +210,9 @@ tooltip > box {
 #cpu {
   background-color: @cpu;
 }
-
 /*--------------------
     Idle inhibitor
 --------------------*/
-
-#custom-right_inv.1 {
-  color: @time;
-}
 #idle_inhibitor {
   background-color: @time;
 }
@@ -231,7 +220,6 @@ tooltip > box {
 /*-----------------
     System tray
 -----------------*/
-
 #network {
   background-color: @tray;
   padding: 0 6px 0 4px;

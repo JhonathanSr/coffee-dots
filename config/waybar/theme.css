@@ -30,19 +30,19 @@
 
 /* Module colors */
 
-@define-color workspaces     alpha(@surface0,0.5);
-@define-color dividers       alpha(@surface0,0.5);
-@define-color temperature    alpha(@surface0,0.5);
-@define-color memory         alpha(@surface0,0.5);
-@define-color cpu            alpha(@surface0,0.5);
-@define-color time           alpha(@surface0,0.5);
-@define-color date           alpha(@surface0,0.5);
-@define-color tray           alpha(@surface0,0.5);
-@define-color volume         alpha(@surface0,0.5);
-@define-color backlight      alpha(@surface0,0.5);
-@define-color battery        alpha(@surface0,0.5);
-@define-color power          alpha(@surface0,0.5);
-@define-color media          alpha(@surface0,0.5);
+@define-color workspaces     @main-bg;
+@define-color dividers       @main-bg;
+@define-color temperature    @main-bg;
+@define-color memory         @main-bg;
+@define-color cpu            @main-bg;
+@define-color time           @main-bg;
+@define-color date           @main-bg;
+@define-color tray           @main-bg;
+@define-color volume         @main-bg;
+@define-color backlight      @main-bg;
+@define-color battery        @main-bg;
+@define-color power          @main-bg;
+@define-color media          @main-bg;
 
 /* State colors */
 

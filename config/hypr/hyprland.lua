@@ -24,14 +24,14 @@
 hl.monitor({
 	output = "DP-1",
 	mode = "1920x1080@240",
-	position = "auto",
+	position = "0x0",
 	scale = 1,
 })
 
 hl.monitor({
 	output = "HDMI-A-1",
-	mode = "1920x1080@165",
-	position = "auto-center-right",
+	mode = "1920x1080@144",
+	position = "1920x0",
 	scale = 1,
 	transform = 3,
 })
@@ -65,6 +65,8 @@ local active_border_color = "rgb(faa968)"
 -------------------------------
 
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
+--hl.env("AQ_DRM_DEVICES", "/dev/dri/by-path/pci-0000:05:00.0-card:/dev/dri/by-path/pci-0000:01:00.0-card")
+--hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
@@ -91,16 +93,10 @@ hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 -- Or execute your favorite apps at launch like this:
 --
 hl.on("hyprland.start", function()
-	-- 1. Sincronizar el entorno INMEDIATAMENTE (Antes de lanzar cualquier app)
 	hl.exec_cmd("dbus-update-activation-environment --systemd --all && swayosd-server &")
-
-	-- 2. Inicializar el llavero de GNOME integrado con la sesión de UWSM
-	hl.exec_cmd("uwsm-app -- gnome-keyring-daemon --start --components=secrets")
-
-	-- 3. Agente de Polkit y Servicios del Sistema
 	hl.exec_cmd("systemctl --user start hyprpolkitagent")
-	--hl.exec_cmd("systemctl --user start elephant.service")
-
+	hl.exec_cmd("uwsm-app -- gnome-keyring-daemon --start --components=secrets")
+	hl.exec_cmd("systemctl --user enable --now hypridle.service")
 	-- 4. Componentes de la Interfaz (Gestionados por UWSM)
 	hl.exec_cmd("uwsm-app -- waybar")
 	hl.exec_cmd("uwsm-app -- fcitx5 --disable notificationitem")
@@ -109,7 +105,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("systemctl --user enable --now docker.service")
 	-- 5. Configuraciones estéticas de Hyprland
 	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
-	hl.exec_cmd("uwsm-app -- kdeconnectd")
+	-- hl.exec_cmd("uwsm-app -- kdeconnectd")
 end)
 
 -----------------------
@@ -138,7 +134,7 @@ end)
 hl.config({
 	general = {
 		gaps_in = 2,
-		gaps_out = 1,
+		gaps_out = 2,
 
 		border_size = 1,
 
@@ -152,7 +148,6 @@ hl.config({
 
 		-- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
 		allow_tearing = false,
-
 		layout = "dwindle",
 	},
 
@@ -249,16 +244,16 @@ hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" 
 -- Ref https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 -- "Smart gaps" / "No gaps when only"
 -- uncomment all if you wish to use that.
-hl.workspace_rule({ workspace = "1", monitor = "DP-1", persistent = true })
-hl.workspace_rule({ workspace = "3", monitor = "DP-1", persistent = true })
-hl.workspace_rule({ workspace = "5", monitor = "DP-1", persistent = true })
-hl.workspace_rule({ workspace = "7", monitor = "DP-1", persistent = true })
-
-hl.workspace_rule({ workspace = "2", monitor = "HDMI-A-1", persistent = true })
-hl.workspace_rule({ workspace = "4", monitor = "HDMI-A-1", persistent = true })
-hl.workspace_rule({ workspace = "6", monitor = "HDMI-A-1", persistent = true })
-hl.workspace_rule({ workspace = "8", monitor = "HDMI-A-1", persistent = true })
-
+-- hl.workspace_rule({ workspace = "1", monitor = "eDP-1DP-1", persistent = true })
+-- hl.workspace_rule({ workspace = "2", monitor = "eDP-1", persistent = true })
+-- hl.workspace_rule({ workspace = "5", monitor = "eDP-1", persistent = true })
+-- hl.workspace_rule({ workspace = "7", monitor = "eDP-1", persistent = true })
+--
+-- hl.workspace_rule({ workspace = "2", monitor = "HDMI-A-1", persistent = true })
+-- hl.workspace_rule({ workspace = "4", monitor = "HDMI-A-1", persistent = true })
+-- hl.workspace_rule({ workspace = "6", monitor = "HDMI-A-1", persistent = true })
+-- hl.workspace_rule({ workspace = "8", monitor = "HDMI-A-1", persistent = true })
+--
 -- hl.workspace_rule({ workspace = "f[1]",   gaps_out = 0, gaps_in = 0 })
 -- hl.window_rule({
 --     name  = "no-gaps-wtv1",
@@ -300,6 +295,7 @@ hl.config({
 	cursor = {
 		hide_on_key_press = true,
 		warp_on_change_workspace = 1,
+		no_hardware_cursors = true,
 	},
 
 	binds = {
@@ -319,14 +315,16 @@ hl.config({
 		kb_rules = "",
 		repeat_rate = 25,
 		repeat_delay = 300,
+		numlock_by_default = true,
 
 		follow_mouse = 1,
 
 		sensitivity = 0, -- -1.0 - 1.0, 0 means no modification.
 
 		touchpad = {
+			clickfinger_behavior = true,
 			natural_scroll = false,
-			scroll_factor = 0.2,
+			scroll_factor = 0.4,
 		},
 	},
 })
@@ -372,11 +370,14 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(music))
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("steam"))
 hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(obsidian))
 hl.bind(mainMod .. " + SLASH", hl.dsp.exec_cmd(bitwarden))
+hl.bind("XF86Calculator", hl.dsp.exec_cmd("uwsm-app -- gnome-calculator"))
+hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("loginctl lock-session"))
+
 -- Tilling
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(secondMainmod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "maximized" }))
-hl.bind(secondMainmod .. " + J", hl.dsp.layout("togglesplit"))
+hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
 
 hl.bind(mainMod .. " + LEFT", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + RIGHT", hl.dsp.focus({ direction = "right" }))
@@ -519,6 +520,9 @@ hl.bind("PRINT", hl.dsp.exec_cmd(bin_path .. "screenshot smart slurp"))
 --hl.bind("ALT + PRINT", hl.dsp.exec_cmd("screenrecord"))
 
 hl.bind("SUPER + PRINT", hl.dsp.exec_cmd("pkill hyprpicker || hyprpicker -a"))
+
+hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd(bin_path .. "monitor-internal off"), { locked = true })
+hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd(bin_path .. "monitor-internal on"), { locked = true })
 
 local MAX_ZOOM = 3
 local MIN_ZOOM = 1
@@ -704,4 +708,15 @@ hl.window_rule({
 		class = "com.freerdp.client.sdl3",
 	},
 	workspace = "special:magic",
+})
+
+hl.window_rule({
+	name = "Calculator",
+	match = {
+		class = "org.gnome.Calculator",
+	},
+	float = true,
+	fullscreen = false,
+	center = true,
+	size = { "(monitor_w*0.3)", "(monitor_h*0.3)" },
 })

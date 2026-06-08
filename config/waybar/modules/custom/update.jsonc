@@ -3,12 +3,11 @@
     "exec": "~/.config/waybar/scripts/update module",
     "hide-empty-text": true,
     "return-type": "json",
-    "interval": 3600,
-    "signal": 1,
+    "interval": 21600,
+    "signal": 7,
     "format": "{}",
     "min-length": 2,
     "max-length": 2,
-    "on-click": "ghostty --title=\"tui\" -e ~/.config/waybar/scripts/update",
-    "on-click-right": "pkill -SIGUSR2 waybar &"
+    "on-click": "ghostty --title=\"tui\" -e ~/.config/waybar/scripts/update"
   }
 }

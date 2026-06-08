@@ -88,4 +88,4 @@ echo -e "\n${CGR}${BLD}¡Disfruta tu café con Arch Linux y Coffee-Dots! ☕${CN
 
 # Pausa de cortesía antes del reinicio necesario para aplicar cambios.
 sleep 2
-reboot
+

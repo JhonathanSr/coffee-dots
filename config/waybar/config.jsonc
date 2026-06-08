@@ -12,56 +12,75 @@
 	    Layout
 	------------*/
 
-  "modules-left": [
-    "custom/distro",
-    "custom/right_div",
-    "custom/right_inv",
-    "hyprland/workspaces",
-    "custom/right_div"
-  ],
+  "modules-left": ["custom/distro", "hyprland/workspaces", "custom/media"],
   "modules-center": [
-
     //"temperature",
     //"memory",
-    //"cpu",
-    "custom/left_div",
-    "custom/left_inv",
-    "custom/left_div",
+    "cpu",
     "clock#date",
     "clock#time",
-    "custom/right_div",
-    "custom/right_inv",
-    "custom/right_div"
+    "group/hiddencenter"
   ],
   "modules-right": [
-    "custom/left_div",
-    "custom/media",
-    "custom/right_div",
-    "custom/right_inv",
-    "custom/left_inv",
-    "custom/left_div",
-    "backlight",
-    "battery",
-    "idle_inhibitor",
+    // "backlight",
+    "group/hiddenrigth",
     "network",
-    "bluetooth",
-    "custom/update",
-    "custom/left_inv",
-    "custom/left_div",
+    "pulseaudio#output",
+    "battery",
     "custom/power"
   ],
 
   /*-------------
 	    Options
 	-------------*/
+  "group/hiddenrigth": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/expand-icon#rigth",
+      "idle_inhibitor",
+      "bluetooth",
+      "pulseaudio#input"
+    ],
+    "drawer": {
+      "transition-left-to-right": false
+    }
+  },
+  "custom/expand-icon#rigth": {
+    "format": "",
+    "tooltip": false,
+    "on-scroll-up": "",
+    "on-scroll-down": "",
+    "on-scroll-left": "",
+    "on-scroll-right": ""
+  },
+  "group/hiddencenter": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/expand-icon#left",
+      "custom/powerprofile",
+      "custom/update"
+    ],
+    "drawer": {
+      "transition-rigth-to-left": false
+    }
+  },
+  "custom/expand-icon#left": {
+    "format": "",
+    "rotate": 180,
+    "tooltip": false,
+    "on-scroll-up": "",
+    "on-scroll-down": "",
+    "on-scroll-left": "",
+    "on-scroll-right": ""
+  },
 
   // "expand-center":
   // "expand-left":
   // "expand-right":
   "layer": "top",
-  "output": ["DP-1"],
+  // "output": ["DP-1"],
   // "position":
-  "height": 22,
+  "height": 26,
   "width": 0,
   "margin": 0,
   // "margin-top":
@@ -71,7 +90,7 @@
   // "no-center":
   "spacing": 0,
   // "name":
-  "mode": "dock",
+  //"mode": "dock",
   // "start_hidden":
   // "modifier-reset":
   // "exclusive":

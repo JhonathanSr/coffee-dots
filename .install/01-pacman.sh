@@ -132,6 +132,7 @@ install_official_packages() {
     "wf-recorder"
 
     # --- Estética, Iconos y Fuentes Base ---
+    "gtk-engine-murrine"
     "kvantum"
     "gnome-themes-extra"
     "yaru-icon-theme"
@@ -157,8 +158,10 @@ install_official_packages() {
     "docker"
     "docker-buildx"
     "docker-compose"
-    "kdeconnect"
     "sshfs"
+    "gnome-calculator"
+    "gum"
+    "socat"
   )
 
   sudo pacman -S --needed --noconfirm "${CORE_PACKAGES[@]}"

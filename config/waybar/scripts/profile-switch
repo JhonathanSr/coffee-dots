@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# 1. Detectar si estamos conectados a la corriente (1 = conectado, 0 = batería)
+# Si tu sistema tiene un nombre de adaptador diferente, revisa: ls /sys/class/power_supply/
+ac_status=$(cat /sys/class/power_supply/ACAD/online 2>/dev/null || echo 1)
+
+# 2. Obtener lista de perfiles disponibles y limpiar
+# Usamos un filtro dinámico según el estado de energía
+if [[ "$ac_status" -eq 0 ]]; then
+    # Estamos en batería: Filtramos performance
+    profiles=$(powerprofilesctl list | grep -E '^(\*| )+ [a-z-]+:' | sed 's/[* :]//g' | grep -v "performance")
+else
+    # Estamos en AC: Disponibles todos
+    profiles=$(powerprofilesctl list | grep -E '^(\*| )+ [a-z-]+:' | sed 's/[* :]//g')
+fi
+
+# 3. Obtener el actual y convertir la lista a array
+current=$(powerprofilesctl get)
+mapfile -t profile_array <<< "$profiles"
+
+# 4. Encontrar el siguiente índice de forma segura
+index=0
+for i in "${!profile_array[@]}"; do
+    [[ "${profile_array[$i]}" == "$current" ]] && index=$i
+done
+
+# Calcular siguiente, asegurando que no nos quedemos fuera del array
+next_index=$(( (index + 1) % ${#profile_array[@]} ))
+next="${profile_array[$next_index]}"
+
+# 5. Aplicar y refrescar
+powerprofilesctl set "$next"
+pkill -RTMIN+8 waybar
+
+# Notificación (usando notify-send o tu sistema actual)
+notify-send "Coffee-Dots" "Perfil cambiado a: $next" -i appointment-urgent

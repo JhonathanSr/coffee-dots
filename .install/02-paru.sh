@@ -58,7 +58,6 @@ install_aur_packages() {
     "mise"
     "lazydocker"
     "python-terminaltexteffects"
-    "tzupdate"
 
     # --- Aplicaciones de Escritorio y Productividad ---
     "zen-browser-bin"
@@ -75,7 +74,7 @@ install_aur_packages() {
     # --- Estética y Tipografías de AUR ---
     "nwg-look-flatpak-git"
     "gnome-themes-extra"
-    "gtk-engine-murrine-git"
+    "gtk-engine-murrine"
     "yaru-gtk-theme"
     "kvantum-theme-materia"
     "ttf-cascadia-mono-nerd"
