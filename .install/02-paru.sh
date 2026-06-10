@@ -73,7 +73,6 @@ install_aur_packages() {
 
     # --- Estética y Tipografías de AUR ---
     "nwg-look-flatpak-git"
-    "gnome-themes-extra"
     "gtk-engine-murrine"
     "yaru-gtk-theme"
     "kvantum-theme-materia"
@@ -86,9 +85,10 @@ install_aur_packages() {
     "arj"
 
     "inotify-tools"
-    "python-setuptools"
-    "zscroll-git"
     "gitflow-avh"
+    "hyprland-share-picker"
+    "bibata-cursor-git"
+    "visual-studio-code-bin"
   )
 
   # Ejecución de Paru delegando el logging de errores

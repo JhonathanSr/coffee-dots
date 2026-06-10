@@ -25,7 +25,7 @@
     "min-length": 7,
     "max-length": 7,
     "on-click": "ghostty --title=\"tui\" -e wiremix",
-    "on-click-right": "~/.config/waybar/scripts/volume output mute",
+    "on-click-right": "~/.config/coffee/volume output mute",
     "tooltip": false
   },
 
@@ -39,7 +39,7 @@
     "format-source-muted": "󰍭",
     "min-length": 3,
     "max-length": 3,
-    "on-click": "~/.config/waybar/scripts/volume input mute",
+    "on-click": "~/.config/coffee/volume input mute",
     "tooltip": false
   }
 }

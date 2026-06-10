@@ -1,9 +1,0 @@
-{
-  "custom/media": {
-    "exec": "~/.config/waybar/scripts/mediaplayer",
-    "tooltip": false,
-    "escape": true,
-    "min-length": 40,
-    "max-length": 40
-  }
-}

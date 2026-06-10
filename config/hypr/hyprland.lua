@@ -22,18 +22,18 @@
 --})
 
 hl.monitor({
-	output = "DP-1",
-	mode = "1920x1080@240",
-	position = "0x0",
+	output = "",
+	mode = "preferred",
+	position = "1920x0",
 	scale = 1,
 })
 
 hl.monitor({
 	output = "HDMI-A-1",
-	mode = "1920x1080@144",
-	position = "1920x0",
+	mode = "1920x1080@240",
+	position = "0x0",
 	scale = 1,
-	transform = 3,
+	--transform = 3,
 })
 
 ---------------------
@@ -54,7 +54,7 @@ local visual = "code"
 local editor = "uwsm app -- ghostty -e nvim"
 local docker = "lazydocker"
 local btop = "btop"
-local music = "spotify"
+local music = "spotify-launcher"
 local obsidian = "obsidian"
 local bitwarden = "uwsm app -- bitwarden-desktop"
 local bin_path = "~/.config/coffee/"
@@ -70,9 +70,12 @@ local active_border_color = "rgb(faa968)"
 
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
-hl.env("QT_QPA_PLATFORMTHEME", " qt6ct")
+--hl.env("XDG_CONFIG_DIR", "$HOME")
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
+--hl.env("XDG_CONFIG_HOME", "$HOME/.config")
 -- Force all apps to use Wayland.
 hl.env("GDK_BACKEND", "wayland,x11,*")
+hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("QT_STYLE_OVERRIDE", "kvantum")
 hl.env("MOZ_ENABLE_WAYLAND", "1")
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "wayland")
@@ -105,7 +108,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("systemctl --user enable --now docker.service")
 	-- 5. Configuraciones estéticas de Hyprland
 	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
-	-- hl.exec_cmd("uwsm-app -- kdeconnectd")
+	
 end)
 
 -----------------------
@@ -213,6 +216,15 @@ hl.config({
 	},
 })
 
+hl.config({
+	xwayland = {
+		force_zero_scaling = true,
+	},
+
+	ecosystem = {
+		no_update_news = true,
+	},
+})
 -- Default curves and animations, see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Animations/
 hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
 hl.curve("easeInOutCubic", { type = "bezier", points = { { 0.65, 0.05 }, { 0.36, 1 } } })

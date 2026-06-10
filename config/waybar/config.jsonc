@@ -12,7 +12,7 @@
 	    Layout
 	------------*/
 
-  "modules-left": ["custom/distro", "hyprland/workspaces", "custom/media"],
+  "modules-left": ["custom/distro", "hyprland/workspaces"],
   "modules-center": [
     //"temperature",
     //"memory",

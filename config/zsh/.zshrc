@@ -21,6 +21,7 @@ export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 export BAT_THEME="base16"
 export PATH=$HOME/.config/coffee:$PATH
 export PATH=$HOME/.config/rofi/scripts:$PATH
+export XDG_CONFIG_DIR=$HOME
 
 # Optimización para Radeon RX 6600 XT (RDNA 2)
 export HSA_OVERRIDE_GFX_VERSION=10.3.0

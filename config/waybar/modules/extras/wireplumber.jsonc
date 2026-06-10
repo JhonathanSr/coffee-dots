@@ -32,12 +32,12 @@
 		// "align":
 		// "justify":
 		// "scroll-step":
-		"on-click": "~/.config/waybar/scripts/volume output mute",
+		"on-click": "~/.config/coffee/volume output mute",
 		// "on-click-middle":
 		// "on-click-right":
 		// "on-update":
-		"on-scroll-up": "~/.config/waybar/scripts/volume output raise",
-		"on-scroll-down": "~/.config/waybar/scripts/volume output lower",
+		"on-scroll-up": "~/.config/coffee/volume output raise",
+		"on-scroll-down": "~/.config/coffee/volume output lower",
 		// "tooltip":
 		"tooltip-format": "Device: {node_name}",
 		// "max-volume":

@@ -1,6 +1,6 @@
 {
   "custom/update": {
-    "exec": "~/.config/waybar/scripts/update module",
+    "exec": "~/.config/coffee/update module",
     "hide-empty-text": true,
     "return-type": "json",
     "interval": 21600,

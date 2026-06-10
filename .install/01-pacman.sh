@@ -62,7 +62,7 @@ install_official_packages() {
     "hyprshot"
     "hyprsunset"
     "hyprpaper"
-    "rofi"
+    "walker"
     "hyprpolkitagent"
 
     # --- Base de Compilación (Build Essentials) ---
@@ -132,10 +132,8 @@ install_official_packages() {
     "wf-recorder"
 
     # --- Estética, Iconos y Fuentes Base ---
-    "gtk-engine-murrine"
     "kvantum"
     "gnome-themes-extra"
-    "yaru-icon-theme"
     "libnotify"
     "libqalculate"
     "fontconfig"
@@ -162,6 +160,8 @@ install_official_packages() {
     "gnome-calculator"
     "gum"
     "socat"
+    "bitwarden"
+    "spotify-launcher"
   )
 
   sudo pacman -S --needed --noconfirm "${CORE_PACKAGES[@]}"

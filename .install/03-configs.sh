@@ -6,7 +6,12 @@
 # -----------------------------------------------------------------------------
 
 # --- COFFEE BLEND (Colors & Variables) ---------------------------------------
-CRE=$(tput setaf 1); CYE=$(tput setaf 3); CGR=$(tput setaf 2); CBL=$(tput setaf 4); BLD=$(tput bold); CNC=$(tput sgr0)
+CRE=$(tput setaf 1)
+CYE=$(tput setaf 3)
+CGR=$(tput setaf 2)
+CBL=$(tput setaf 4)
+BLD=$(tput bold)
+CNC=$(tput sgr0)
 ERROR_LOG="$HOME/coffee-dots/coffee-errors.log"
 REAL_USER="${SUDO_USER:-$(logname 2>/dev/null || echo "$USER")}"
 REAL_HOME=$(eval echo "~$REAL_USER")
@@ -28,15 +33,15 @@ trap 'printf "%s%sERROR:%s Fallo en despliegue de configuraciones (Línea $LINEN
 # ------------------------------------------------------------------------------
 setup_zsh_and_path() {
   printf "%b\n" "${BLD}${CYE}Configurando entorno Zsh personalizado ($ZDOTDIR) y PATH...${CNC}"
-  
+
   # 1. Asegurar que Zsh busque sus configs en ~/.config/zsh
   local zshenv_line='export ZDOTDIR="$HOME/.config/zsh"'
   if [ -f "$ZSHENV_FILE" ]; then
     if ! grep -Fxq "$zshenv_line" "$ZSHENV_FILE"; then
-      printf "\n# Added by coffee-dots ☕\n%s\n" "$zshenv_line" >> "$ZSHENV_FILE"
+      printf "\n# Added by coffee-dots ☕\n%s\n" "$zshenv_line" >>"$ZSHENV_FILE"
     fi
   else
-    printf "# Added by coffee-dots ☕\n%s\n" "$zshenv_line" > "$ZSHENV_FILE"
+    printf "# Added by coffee-dots ☕\n%s\n" "$zshenv_line" >"$ZSHENV_FILE"
   fi
   printf "%b\n" "${CGR}✓ Redirección ZDOTDIR configurada en ~/.zshenv${CNC}"
 
@@ -116,8 +121,8 @@ setup_mimetypes() {
   done
 
   local video_types=(
-    video/mp4 video/x-msvideo video/x-matroska video/x-flv video/x-ms-wmv 
-    video/mpeg video/ogg video/webm video/quicktime video/3gpp video/3gpp2 
+    video/mp4 video/x-msvideo video/x-matroska video/x-flv video/x-ms-wmv
+    video/mpeg video/ogg video/webm video/quicktime video/3gpp video/3gpp2
     video/x-ms-asf video/x-ogm+ogg video/x-theora+ogg application/ogg
   )
   for type in "${video_types[@]}"; do
@@ -125,8 +130,8 @@ setup_mimetypes() {
   done
 
   local text_types=(
-    text/plain text/english text/x-makefile text/x-c++hdr text/x-c++src 
-    text/x-chdr text/x-csrc text/x-java text/x-moc text/x-pascal text/x-tcl 
+    text/plain text/english text/x-makefile text/x-c++hdr text/x-c++src
+    text/x-chdr text/x-csrc text/x-java text/x-moc text/x-pascal text/x-tcl
     text/x-tex application/x-shellscript text/x-c text/x-c++ application/xml text/xml
   )
   for type in "${text_types[@]}"; do
@@ -141,9 +146,8 @@ setup_mimetypes() {
 # ------------------------------------------------------------------------------
 main() {
   mkdir -p "$TARGET_CONFIG_DIR"
-  
-  mise use --global node
 
+  mise use --global node
 
   setup_zsh_and_path
   deploy_dotfiles
@@ -158,11 +162,13 @@ main() {
 
   # Refrescar base de datos de escritorio
   update-desktop-database "$REAL_HOME/.local/share/applications" 2>/dev/null || true
-  
+
   # Corrección final de dueños en las rutas modificadas
   chown -R "${REAL_USER}:${REAL_USER}" "$TARGET_CONFIG_DIR"
   chown "$REAL_USER:$REAL_USER" "$ZSHENV_FILE" 2>/dev/null || true
-  
+  #permisos de ejecucion a los scripts
+  find "$REAL_HOME"/.config/coffee -type d -exec chmod +x {} +
+
   printf "\n%b\n" "${CGR}✓ [Fase 3] Despliegue de entorno, Zsh modular y mimetypes completado con éxito.${CNC}"
 }
 
