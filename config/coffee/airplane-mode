@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+# -------------------------------------------------------------------------
+# Coffee-Dots - Airplane Mode Toggle, Orchestration & OSD Sync
+# Style:       coffee-dots ☕
+# -------------------------------------------------------------------------
+
+STATE_FILE="$HOME/.local/state/coffee/airplane-mode-enabled"
+OSD_WRAPPER="$HOME/.config/coffee/swayosd-wrapper"
+
+# Scripts hermanos en la raíz de tu configuración
+WIFI_TOGGLE="$HOME/.config/coffee/network"
+BT_TOGGLE="$HOME/.config/coffee/bluetooth"
+
+refresh_waybar() {
+  pkill -SIGRTMIN+9 waybar 2>/dev/null || true
+}
+
+# ACTIVAR MODO AVIÓN (Apagar todas las radios)
+enable_airplane() {
+  # 1. Persistencia del estado global
+  mkdir -p "$(dirname "$STATE_FILE")"
+  touch "$STATE_FILE"
+
+  # 2. Orquestar el apagado usando tus scripts existentes (sin bloquear el hilo)
+  [ -x "$WIFI_TOGGLE" ] && "$WIFI_TOGGLE" off >/dev/null 2>&1
+  [ -x "$BT_TOGGLE" ] && "$BT_TOGGLE" off >/dev/null 2>&1
+
+  # 3. Mostrar el OSD nativo
+  refresh_waybar
+  if command -v swayosd-wrapper >/dev/null 2>&1; then
+    exec swayosd-wrapper --custom-icon airplane-mode-symbolic --custom-message "Airplane Mode ON"
+  else
+    exec swayosd-client --custom-icon airplane-mode-symbolic --custom-message "Airplane Mode ON"
+  fi
+}
+
+# DESACTIVAR MODO AVIÓN (Encender radios de forma segura)
+disable_airplane() {
+  # 1. Limpiar persistencia global
+  rm -f "$STATE_FILE"
+
+  # 2. Orquestar el encendido usando tus scripts existentes
+  [ -x "$WIFI_TOGGLE" ] && "$WIFI_TOGGLE" on >/dev/null 2>&1
+  [ -x "$BT_TOGGLE" ] && "$BT_TOGGLE" on >/dev/null 2>&1
+
+  # 3. Mostrar el OSD nativo
+  refresh_waybar
+  if command -v swayosd-wrapper >/dev/null 2>&1; then
+    exec swayosd-wrapper --custom-icon airplane-mode-disabled-symbolic --custom-message "Airplane Mode OFF"
+  else
+    exec swayosd-client --custom-icon airplane-mode-disabled-symbolic --custom-message "Airplane Mode OFF"
+  fi
+}
+
+# Determinar el estado actual consultando a rfkill de forma defensiva
+is_airplane_active() {
+  # Si el archivo existe o si ambas radios principales reportan bloqueo de kernel
+  if [ -f "$STATE_FILE" ]; then
+    return 0
+  fi
+
+  if command -v rfkill >/dev/null 2>&1; then
+    local wifi_blocked=$(rfkill list wlan | grep -q "Soft blocked: yes" && echo "yes" || echo "no")
+    local bth_blocked=$(rfkill list bluetooth | grep -q "Soft blocked: yes" && echo "yes" || echo "no")
+
+    if [ "$wifi_blocked" = "yes" ] && [ "$bth_blocked" = "yes" ]; then
+      return 0
+    fi
+  fi
+  return 1
+}
+
+# Controlar el flujo según el argumento pasado
+case "${1:-toggle}" in
+on)
+  enable_airplane
+  ;;
+off)
+  disable_airplane
+  ;;
+toggle)
+  if is_airplane_active; then
+    disable_airplane
+  else
+    enable_airplane
+  fi
+  ;;
+*)
+  echo "Usage: $(basename "$0") [on|off|toggle]" >&2
+  exit 1
+  ;;
+esac
+

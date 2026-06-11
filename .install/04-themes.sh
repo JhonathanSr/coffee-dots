@@ -4,7 +4,12 @@
 # Descripción: Centraliza la consistencia visual de coffee-dots sin interfaces gráficas.
 # ==============================================================================
 
-CRE=$(tput setaf 1); CYE=$(tput setaf 3); CGR=$(tput setaf 2); CBL=$(tput setaf 4); BLD=$(tput bold); CNC=$(tput sgr0)
+CRE=$(tput setaf 1)
+CYE=$(tput setaf 3)
+CGR=$(tput setaf 2)
+CBL=$(tput setaf 4)
+BLD=$(tput bold)
+CNC=$(tput sgr0)
 ERROR_LOG="$HOME/coffee-dots/coffee-errors.log"
 REAL_USER="${SUDO_USER:-$(logname 2>/dev/null || echo "$USER")}"
 REAL_HOME=$(eval echo "~$REAL_USER")
@@ -19,7 +24,7 @@ setup_gtk_theme() {
   printf "%b\n" "${BLD}${CYE}Configurando consistencia GTK (Modo Oscuro)...${CNC}"
   local gtk_3="$REAL_HOME/.config/gtk-3.0/settings.ini"
   local gtk_4="$REAL_HOME/.config/gtk-4.0/settings.ini"
-  
+
   for file in "$gtk_3" "$gtk_4"; do
     sudo -u "${REAL_USER}" mkdir -p "$(dirname "$file")"
     if [ ! -f "$file" ]; then
@@ -41,9 +46,9 @@ setup_gtk_theme() {
 setup_kvantum_theme() {
   printf "%b\n" "${BLD}${CYE}Configurando Kvantum de forma headless...${CNC}"
   local kvantum_conf="$REAL_HOME/.config/Kvantum/kvantum.kvconfig"
-  
+
   sudo -u "${REAL_USER}" mkdir -p "$(dirname "$kvantum_conf")"
-  
+
   # Forzamos un tema oscuro nativo de Kvantum (ej: KvFlatDark o KvDark)
   # Si en tus coffee-dots tienes un tema personalizado, cambia 'KvFlatDark' por el tuyo.
   cat <<EOF | sudo -u "${REAL_USER}" tee "$kvantum_conf" >/dev/null
@@ -59,10 +64,10 @@ setup_qt_ct() {
   printf "%b\n" "${BLD}${CYE}Configurando perfiles de qt5ct y qt6ct...${CNC}"
   local qt5_conf="$REAL_HOME/.config/qt5ct/qt5ct.conf"
   local qt6_conf="$REAL_HOME/.config/qt6ct/qt6ct.conf"
-  
+
   for file in "$qt5_conf" "$qt6_conf"; do
     sudo -u "${REAL_USER}" mkdir -p "$(dirname "$file")"
-    
+
     # Inyectamos la configuración para que el backend use Kvantum y paleta oscura
     cat <<EOF | sudo -u "${REAL_USER}" tee "$file" >/dev/null
 [Appearance]
@@ -73,21 +78,26 @@ EOF
   done
 }
 
+setup_theme() {
+  gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
+  gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+  gsettings set org.gnome.desktop.interface icon-theme "Yaru-blue"
+  gsettings set org.gnome.desktop.interface gtk-enable-primary-paste true
+
+  sudo gtk-update-icon-cache /usr/share/icons/Yaru
+}
+
 # ------------------------------------------------------------------------------
 # Ejecución Principal
 # ------------------------------------------------------------------------------
 main() {
   printf "%b\n\n" "${CBL}${BLD}[Coffee-Dots] Iniciando Fase 4: Automatización Estética CLI...${CNC}"
-  
+
   setup_gtk_theme
   setup_kvantum_theme
   setup_qt_ct
-  
-  # Forzar recarga en la sesión viva si gsettings está disponible
-  if command -v gsettings &>/dev/null; then
-    sudo -u "${REAL_USER}" gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>>"$ERROR_LOG" || true
-  fi
-  
+  setup_theme
+
   # Corregir la propiedad de todo lo alterado en .config
   chown -R "${REAL_USER}:${REAL_USER}" "$REAL_HOME/.config/gtk-"* "$REAL_HOME/.config/Kvantum" "$REAL_HOME/.config/qt"* 2>>"$ERROR_LOG" || true
 
@@ -95,3 +105,4 @@ main() {
 }
 
 main "$@"
+

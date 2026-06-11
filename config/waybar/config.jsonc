@@ -16,7 +16,6 @@
   "modules-right": [
     // "backlight",
     "group/hiddenrigth",
-    "network",
     "pulseaudio#output",
     "battery",
     "custom/power"
@@ -28,33 +27,13 @@
       "idle_inhibitor",
       "bluetooth",
       "pulseaudio#input",
+      "network",
+      "custom/airplane",
       "custom/update"
     ],
     "drawer": {
       "transition-left-to-right": false
     }
-  },
-  /*-------------------
-	    Audio
-	-------------------*/
-  "pulseaudio#output": {
-    "format": "{icon} {volume}%",
-    "format-muted": "{icon} {volume}%",
-    "format-icons": {
-      "default": [
-        "󰕿",
-        "󰖀",
-        "󰕾"
-      ],
-      "default-muted": "󰝟",
-      "headphone": "󰋋",
-      "headphone-muted": "󰟎",
-      "headset": "󰋎",
-      "headset-muted": "󰋐"
-    },
-    "on-click": "ghostty --title=\"tui\" -e wiremix",
-    "on-click-right": "~/.config/coffee/volume output mute",
-    "tooltip": false
   },
   /*-------------------
 	    tray
@@ -86,6 +65,28 @@
     // "expand":
     // "icons":
     "cursor": true
+  },
+  /*-------------------
+	    Audio
+	-------------------*/
+  "pulseaudio#output": {
+    "format": "{icon} {volume}%",
+    "format-muted": "{icon} {volume}%",
+    "format-icons": {
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ],
+      "default-muted": "󰝟",
+      "headphone": "󰋋",
+      "headphone-muted": "󰟎",
+      "headset": "󰋎",
+      "headset-muted": "󰋐"
+    },
+    "on-click": "ghostty --title=\"tui\" -e wiremix",
+    "on-click-right": "~/.config/coffee/volume output mute",
+    "tooltip": false
   },
   /*----------------
 	    Microphone
@@ -198,7 +199,7 @@
     "format-on": "󰂰",
     "format-connected": "󰂱",
     "on-click": "ghostty --title=\"tui\" -e bluetui",
-    "on-click-right": "~/.config/waybar/scripts/bluetooth off",
+    "on-click-right": "~/.config/waybar/scripts/bluetooth toggle",
     "tooltip-format": "Device Addr: {device_address}",
     "tooltip-format-disabled": "Bluetooth Disabled",
     "tooltip-format-off": "Bluetooth Off",
@@ -294,6 +295,26 @@
     "format": "󰣇",
     "tooltip": false
   },
+  /*-------------
+	    AirplaneMode
+	-------------*/
+  "custom/airplane": {
+    "format": "{}",
+    "return-type": "json",
+    "signal": 9,
+    "exec": "if [ -f $HOME/.local/state/coffee/airplane-mode-enabled ]; then echo '{\"text\": \"󰀝\", \"class\": \"active\", \"tooltip\": \"Airplane Mode ON\"}'; else echo '{\"text\": \"󰀞\", \"class\": \"inactive\", \"tooltip\": \"Airplane Mode OFF\"}'; fi",
+    "on-click": "$HOME/.config/coffee/airplane-mode toggle",
+    "tooltip": true
+  },
+  /*-------------
+	    Screenrecording
+	-------------*/
+  /*"custom/screenrecording-indicator": {
+    "on-click": "omarchy-capture-screenrecording",
+    "exec": "$OMARCHY_PATH/default/waybar/indicators/screen-recording.sh",
+    "signal": 8,
+    "return-type": "json"
+  },*/
   /*-------------
 	    Options
 	-------------*/

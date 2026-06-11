@@ -30,14 +30,30 @@ if [ ! -f "$KEYRING_DIR/login.keyring" ]; then
     echo '' | gnome-keyring-daemon --unlock --components=secrets &>/dev/null
   "
 
-  # Forzamos los metadatos de control para que el sistema sepa que 'login' es el primario
-  echo "login" > "$KEYRING_DIR/default"
-  
-  # Seguridad Unix estricta (Permisos 600 requeridos por libsecret)
+  KEYRING_DIR="$HOME/.local/share/keyrings"
+  KEYRING_FILE="$KEYRING_DIR/Default_keyring.keyring"
+  DEFAULT_FILE="$KEYRING_DIR/default"
+
+  mkdir -p "$KEYRING_DIR"
+
+  cat << EOF > "$KEYRING_FILE"
+    [keyring]
+    display-name=Default keyring
+    ctime=$(date +%s)
+    mtime=0
+    lock-on-idle=false
+    lock-after=false
+  EOF
+
+  cat << EOF > "$DEFAULT_FILE"
+    Default_keyring
+  EOF
+
   chmod 700 "$KEYRING_DIR"
-  chmod 600 "$KEYRING_DIR"/*
+  chmod 600 "$KEYRING_FILE"
+  chmod 644 "$DEFAULT_FILE"
   
-  printf "%b\n" "${CGR}✓ Llavero 'login' (Master) creado con contraseña vacía.${CNC}"
+printf "%b\n" "${CGR}✓ Llavero 'login' (Master) creado con contraseña vacía.${CNC}"
 else
   printf "%b\n" "${CYE}! El llavero ya existe en el disco. Omitiendo para preservar credenciales.${CNC}"
 fi

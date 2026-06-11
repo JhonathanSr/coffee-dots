@@ -48,7 +48,7 @@ local rofi_scripts = home .. "/.config/rofi/scripts/"
 
 local terminal = "ghostty"
 local tui_launcher = 'uwsm app -- ghostty --title="tui" -e '
-local fileManager = "uwsm app -- ghostty --title=\"tui\" -e yazi"
+local fileManager = 'uwsm app -- ghostty --title="tui" -e yazi'
 local browser = "zen-browser"
 local visual = "code"
 local editor = "uwsm app -- ghostty -e nvim"
@@ -61,8 +61,6 @@ local bin_path = "~/.config/coffee/"
 
 local active_border_color = { colors = { "rgba(8a8588ee)", "rgba(e2dddcee)" }, angle = 45 }
 local inactive_border_color = "rgba(584e51aa)"
-
-
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
@@ -79,6 +77,7 @@ hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 hl.env("TERMINAL", terminal)
 --hl.env("XDG_CONFIG_HOME", "$HOME/.config")
 -- Force all apps to use Wayland.
+hl.env("NVD_BACKEND", "direct")
 hl.env("GDK_BACKEND", "wayland,x11,*")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("QT_STYLE_OVERRIDE", "kvantum")
@@ -101,31 +100,33 @@ hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 -- Autostart necessary processes (like notifications daemons, status bars, etc.)
 -- Or execute your favorite apps at launch like this:
 hl.on("hyprland.start", function()
-    -- 1. Sincronizar el entorno D-Bus y SYSTEMD de forma limpia para Wayland e UWSM
-    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XAUTHORITY")
-    hl.exec_cmd("uwsm env WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XAUTHORITY") -- Avisar a UWSM del entorno vivo
-    
-    -- 2. Forzar el reinicio de los portales XDG dentro del entorno limpio
-    hl.exec_cmd("systemctl --user stop xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gnome 2>/dev/null")
-    hl.exec_cmd("systemctl --user start xdg-desktop-portal") 
-    
-    -- 3. Inicializar Daemons del Sistema y Llaveros (Antes de las Apps)
-    hl.exec_cmd("systemctl --user start hyprpolkitagent")
-    hl.exec_cmd("uwsm-app -- gnome-keyring-daemon --start --components=secrets")
-    hl.exec_cmd("uwsm-app -- swayosd-server") 
+	-- 1. Sincronizar el entorno D-Bus y SYSTEMD de forma limpia para Wayland e UWSM
+	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XAUTHORITY")
+	hl.exec_cmd("uwsm env WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XAUTHORITY") -- Avisar a UWSM del entorno vivo
+
+	-- 2. Forzar el reinicio de los portales XDG dentro del entorno limpio
+	hl.exec_cmd(
+		"systemctl --user stop xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gnome 2>/dev/null"
+	)
+	hl.exec_cmd("systemctl --user start xdg-desktop-portal")
+
+	-- 3. Inicializar Daemons del Sistema y Llaveros (Antes de las Apps)
+	hl.exec_cmd("systemctl --user start hyprpolkitagent")
+	hl.exec_cmd("uwsm-app -- gnome-keyring-daemon --start --components=secrets")
+	hl.exec_cmd("uwsm-app -- swayosd-server")
 	hl.exec_cmd("start-power-profile")
 
-    -- 4. Servicios de Usuario persistentes 
-    hl.exec_cmd("systemctl --user start hypridle.service")
-    hl.exec_cmd("systemctl --user start hyprpaper.service")
-    
-    -- 5. Componentes de la Interfaz 
-    hl.exec_cmd("uwsm-app -- waybar")
-    hl.exec_cmd("uwsm-app -- fcitx5 --disable notificationitem")
-    hl.exec_cmd("uwsm-app -- mako")
+	-- 4. Servicios de Usuario persistentes
+	hl.exec_cmd("systemctl --user start hypridle.service")
+	hl.exec_cmd("systemctl --user start hyprpaper.service")
 
-    -- 6. Configuraciones estéticas de Hyprland
-    hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
+	-- 5. Componentes de la Interfaz
+	hl.exec_cmd("uwsm-app -- waybar")
+	hl.exec_cmd("uwsm-app -- fcitx5 --disable notificationitem")
+	hl.exec_cmd("uwsm-app -- mako")
+
+	-- 6. Configuraciones estéticas de Hyprland
+	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
 end)
 
 -----------------------
@@ -541,6 +542,8 @@ hl.bind("XF86KbdLightOnOff", hl.dsp.exec_cmd(bin_path .. "kbd-brightness cycle")
 hl.bind("XF86TouchpadToggle", hl.dsp.exec_cmd(bin_path .. "touchpad-toggle"), { locked = true })
 hl.bind("XF86TouchpadOn", hl.dsp.exec_cmd(bin_path .. "touchpad-toggle on"), { locked = true })
 hl.bind("XF86TouchpadOff", hl.dsp.exec_cmd(bin_path .. "touchpad-toggle off"), { locked = true })
+
+hl.bind("XF86RFKill", hl.dsp.exec_cmd(bin_path .. "airplane-mode toggle"), { locked = true })
 
 -- Screenshots and screen recording.
 --hl.bind("PRINT", hl.dsp.exec_cmd(bin_path .. "screenshot"))
