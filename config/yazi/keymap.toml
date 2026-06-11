@@ -1,0 +1,13 @@
+# ==============================================================================
+# Coffee-Dots: Yazi Keybindings (keymap.toml)
+# ==============================================================================
+
+[[manager.prepend_keymap]]
+on   = [ "<C-Enter>" ]
+run  = 'shell "ghostty --working-directory=\"$PWD\"" --block --detach'
+desc = "Abrir directorio actual en Ghostty"
+
+[[manager.prepend_keymap]]
+on   = [ "o" ]
+run  = 'shell "ghostty --working-directory=\"$PWD\"" --block --detach'
+desc = "Abrir directorio actual en Ghostty"

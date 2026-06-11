@@ -116,8 +116,7 @@ install_official_packages() {
     "pipewire-pulse"
     "libva-utils"
     "ffmpegthumbnailer"
-    "nautilus"
-    "nautilus-python"
+    "yazi"
     "sushi"
 
     # --- Entrada de Texto y Clipboard ---

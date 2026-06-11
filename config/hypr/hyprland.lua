@@ -48,7 +48,7 @@ local rofi_scripts = home .. "/.config/rofi/scripts/"
 
 local terminal = "ghostty"
 local tui_launcher = 'uwsm app -- ghostty --title="tui" -e '
-local fileManager = "nautilus"
+local fileManager = "uwsm app -- ghostty --title=\"tui\" -e yazi"
 local browser = "zen-browser"
 local visual = "code"
 local editor = "uwsm app -- ghostty -e nvim"
@@ -72,6 +72,7 @@ hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 --hl.env("XDG_CONFIG_DIR", "$HOME")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
+hl.env("TERMINAL", terminal)
 --hl.env("XDG_CONFIG_HOME", "$HOME/.config")
 -- Force all apps to use Wayland.
 hl.env("GDK_BACKEND", "wayland,x11,*")
@@ -81,6 +82,7 @@ hl.env("MOZ_ENABLE_WAYLAND", "1")
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "wayland")
 hl.env("OZONE_PLATFORM", "wayland")
 hl.env("XDG_SESSION_TYPE", "wayland")
+hl.env("GTK_THEME", "Adwaita:dark")
 
 -- Allow better support for screen sharing (Google Meet, Discord, etc).
 hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
@@ -94,21 +96,31 @@ hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 
 -- Autostart necessary processes (like notifications daemons, status bars, etc.)
 -- Or execute your favorite apps at launch like this:
---
 hl.on("hyprland.start", function()
-	hl.exec_cmd("dbus-update-activation-environment --systemd --all && swayosd-server &")
-	hl.exec_cmd("systemctl --user start hyprpolkitagent")
-	hl.exec_cmd("uwsm-app -- gnome-keyring-daemon --start --components=secrets")
-	hl.exec_cmd("systemctl --user enable --now hypridle.service")
-	-- 4. Componentes de la Interfaz (Gestionados por UWSM)
-	hl.exec_cmd("uwsm-app -- waybar")
-	hl.exec_cmd("uwsm-app -- fcitx5 --disable notificationitem")
-	hl.exec_cmd("uwsm-app -- mako")
-	hl.exec_cmd("systemctl --user enable --now hyprpaper.service")
-	hl.exec_cmd("systemctl --user enable --now docker.service")
-	-- 5. Configuraciones estéticas de Hyprland
-	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
-	
+    -- 1. Sincronizar el entorno D-Bus y SYSTEMD de forma limpia para Wayland e UWSM
+    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XAUTHORITY")
+    hl.exec_cmd("uwsm env WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XAUTHORITY") -- Avisar a UWSM del entorno vivo
+    
+    -- 2. Forzar el reinicio de los portales XDG dentro del entorno limpio
+    hl.exec_cmd("systemctl --user stop xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gnome 2>/dev/null")
+    hl.exec_cmd("systemctl --user start xdg-desktop-portal") 
+    
+    -- 3. Inicializar Daemons del Sistema y Llaveros (Antes de las Apps)
+    hl.exec_cmd("systemctl --user start hyprpolkitagent")
+    hl.exec_cmd("uwsm-app -- gnome-keyring-daemon --start --components=secrets")
+    hl.exec_cmd("uwsm-app -- swayosd-server") 
+
+    -- 4. Servicios de Usuario persistentes 
+    hl.exec_cmd("systemctl --user start hypridle.service")
+    hl.exec_cmd("systemctl --user start hyprpaper.service")
+    
+    -- 5. Componentes de la Interfaz 
+    hl.exec_cmd("uwsm-app -- waybar")
+    hl.exec_cmd("uwsm-app -- fcitx5 --disable notificationitem")
+    hl.exec_cmd("uwsm-app -- mako")
+
+    -- 6. Configuraciones estéticas de Hyprland
+    hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
 end)
 
 -----------------------
@@ -624,6 +636,17 @@ hl.window_rule({
 	fullscreen = false,
 	center = true,
 	size = { "(monitor_w*0.5)", "(monitor_h*0.5)" },
+})
+
+hl.window_rule({
+	name = "yazi",
+	match = {
+		title = "yazi",
+	},
+	float = true,
+	fullscreen = false,
+	center = true,
+	size = { "(monitor_w*0.6)", "(monitor_h*0.6)" },
 })
 
 hl.window_rule({
