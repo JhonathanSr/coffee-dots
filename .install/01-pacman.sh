@@ -146,6 +146,7 @@ install_official_packages() {
     "mako"
     "swayosd"
     "uwsm"
+    "sddm"
     "fd"
     "eza"
     "fzf"
