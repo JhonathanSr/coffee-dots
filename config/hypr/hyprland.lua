@@ -25,7 +25,7 @@ hl.monitor({
 	output = "",
 	mode = "preferred",
 	position = "1920x0",
-	scale = 1,
+	scale = 1.5,
 })
 
 hl.monitor({
@@ -58,7 +58,11 @@ local music = "spotify-launcher"
 local obsidian = "obsidian"
 local bitwarden = "uwsm app -- bitwarden-desktop"
 local bin_path = "~/.config/coffee/"
-local active_border_color = "rgb(faa968)"
+
+local active_border_color = { colors = { "rgba(8a8588ee)", "rgba(e2dddcee)" }, angle = 45 }
+local inactive_border_color = "rgba(584e51aa)"
+
+
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
@@ -109,6 +113,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("systemctl --user start hyprpolkitagent")
     hl.exec_cmd("uwsm-app -- gnome-keyring-daemon --start --components=secrets")
     hl.exec_cmd("uwsm-app -- swayosd-server") 
+	hl.exec_cmd("start-power-profile")
 
     -- 4. Servicios de Usuario persistentes 
     hl.exec_cmd("systemctl --user start hypridle.service")

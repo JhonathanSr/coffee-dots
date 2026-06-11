@@ -169,6 +169,54 @@ main() {
   #permisos de ejecucion a los scripts
   find "$REAL_HOME"/.config/coffee -type d -exec chmod +x {} +
 
+  # Give this user privileged input access for dictation tools + xbox controllers to work
+sudo usermod -aG input ${USER}
+
+#fast shutdown
+sudo mkdir -p /etc/systemd/system.conf.d
+sudo cp "$REAL_HOME/coffee-dots/default/systemd/faster-shutdown.conf" /etc/systemd/system.conf.d/10-faster-shutdown.conf
+sudo mkdir -p /etc/systemd/system/user@.service.d
+sudo cp "$REAL_HOME/coffee-dots/default/systemd/user@.service.d/faster-shutdown.conf" /etc/systemd/system/user@.service.d/faster-shutdown.conf
+
+
+sudo install -d /etc/systemd/system/plocate-updatedb.service.d
+printf '%s\n' '[Unit]' 'ConditionACPower=true' | sudo tee /etc/systemd/system/plocate-updatedb.service.d/ac-only.conf >/dev/null
+sudo systemctl daemon-reload
+
+sudo mkdir -p /usr/lib/systemd/system-sleep
+sudo install -m 0755 -o root -g root "$OMARCHY_PATH/default/systemd/system-sleep/unmount-fuse" /usr/lib/systemd/system-sleep/
+
+mkdir -p ~/Downloads ~/Pictures ~/Videos ~/.config/gtk-3.0
+
+xdg-user-dirs-update --set TEMPLATES "$HOME"
+xdg-user-dirs-update --set PUBLICSHARE "$HOME"
+xdg-user-dirs-update --set DESKTOP "$HOME"
+
+rmdir ~/Templates ~/Public ~/Desktop 2>/dev/null || true
+
+touch ~/.config/gtk-3.0/bookmarks
+for dir in Downloads Projects Pictures Videos; do
+  printf 'file://%s/%s %s\n' "$HOME" "$dir" "$dir" >>~/.config/gtk-3.0/bookmarks
+done
+
+# Create pacman hook to restart walker after updates
+sudo mkdir -p /etc/pacman.d/hooks
+sudo tee /etc/pacman.d/hooks/walker-restart.hook > /dev/null << EOF
+[Trigger]
+Type = Package
+Operation = Upgrade
+Target = walker
+Target = walker-debug
+Target = elephant*
+
+[Action]
+Description = Restarting Walker services after system update
+When = PostTransaction
+Exec = $COFFEE_BIN_DIR/restart-walker
+EOF
+
+sudo systemctl enable --now iwd
+
   printf "\n%b\n" "${CGR}✓ [Fase 3] Despliegue de entorno, Zsh modular y mimetypes completado con éxito.${CNC}"
 }
 

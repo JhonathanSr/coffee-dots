@@ -79,16 +79,15 @@ install_aur_packages() {
     "ttf-cascadia-mono-nerd"
     "ttf-ia-writer"
 
-    # --- Compresores específicos obsoletos/AUR ---
+    # --- Compresores específicos---
     "7zip"
-    "bzip3"
-    "arj"
 
     "inotify-tools"
     "gitflow-avh"
     "hyprland-share-picker"
     "bibata-cursor-git"
     "visual-studio-code-bin"
+    "elephant"
   )
 
   # Ejecución de Paru delegando el logging de errores

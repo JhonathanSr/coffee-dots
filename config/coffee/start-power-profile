@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # -----------------------------------------------------------------------------
-# Name:        start-powerprofiles.sh
+# Name:        start-power-profile
 # Description: Set the correct power profile on boot based on AC/Battery state.
 # Style:       coffee-dots ☕
 # -----------------------------------------------------------------------------
