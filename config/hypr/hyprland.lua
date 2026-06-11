@@ -25,7 +25,7 @@ hl.monitor({
 	output = "",
 	mode = "preferred",
 	position = "1920x0",
-	scale = 1.5,
+	scale = 1,
 })
 
 hl.monitor({
@@ -44,11 +44,12 @@ hl.monitor({
 
 -- Obtener el directorio HOME del usuario actual
 local home = os.getenv("HOME")
-local rofi_scripts = home .. "/.config/rofi/scripts/"
+local menu_scripts ="~/coffee-dots/config/menu/"
 
 local terminal = "ghostty"
 local tui_launcher = 'uwsm app -- ghostty --title="tui" -e '
 local fileManager = 'uwsm app -- ghostty --title="tui" -e yazi'
+local explorer = "nautilus"
 local browser = "zen-browser"
 local visual = "code"
 local editor = "uwsm app -- ghostty -e nvim"
@@ -61,6 +62,10 @@ local bin_path = "~/.config/coffee/"
 
 local active_border_color = { colors = { "rgba(8a8588ee)", "rgba(e2dddcee)" }, angle = 45 }
 local inactive_border_color = "rgba(584e51aa)"
+
+
+
+
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
@@ -390,10 +395,11 @@ hl.bind(
 -- Apps
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(editor))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(rofi_scripts .. "launcher_t1"))
-hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd(rofi_scripts .. "powermenu_t2"))
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu_scripts .. "launch-walker" ))
+--hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd(rofi_scripts .. "powermenu_t2"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(visual))
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
+hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(fileManager))
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(explorer))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(tui_launcher .. docker))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(tui_launcher .. btop))
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(music))
@@ -668,17 +674,17 @@ hl.window_rule({
 	size = { "(monitor_w*0.1)", "(monitor_h*0.1)" },
 })
 
-hl.window_rule({
-	name = "steam.*",
-	match = {
-		class = "steam.*",
-	},
-	float = true,
-	fullscreen = false,
-	center = true,
-	size = { "(monitor_w*0.5)", "(monitor_h*0.5)" },
-})
-
+-- hl.window_rule({
+-- 	name = "steam.*",
+-- 	match = {
+-- 		class = "steam.*",
+-- 	},
+-- 	float = true,
+-- 	fullscreen = false,
+-- 	center = true,
+-- 	size = { "(monitor_w*0.5)", "(monitor_h*0.5)" },
+-- })
+--
 hl.window_rule({
 	name = "steam",
 	match = {

@@ -272,6 +272,7 @@ _comps=(
 'dist' '_mh'
 'django-admin' '_django'
 'django-admin.py' '_django'
+'dkms' '_dkms'
 'dmake' '_make'
 'dmesg' '_dmesg'
 'dmidecode' '_dmidecode'
@@ -676,7 +677,6 @@ _comps=(
 'killall' '_killall'
 'killall5' '_killall'
 'kioclient' '_kfmclient'
-'kitty' '_kitty'
 'knock' '_knock'
 'konqueror' '_webbrowser'
 'kpartx' '_kpartx'
@@ -1576,6 +1576,7 @@ _comps=(
 'wipefs' '_wipefs'
 'wl-copy' '_wl-copy'
 'wl-paste' '_wl-paste'
+'wl-screenrec' '_wl-screenrec'
 'wodim' '_cdrecord'
 'wpa_cli' '_wpa_cli'
 'wpctl' '_wpctl'
@@ -1690,7 +1691,6 @@ _comps=(
 'zparseopts' '_zparseopts'
 'zpool' '_zfs'
 'zpty' '_zpty'
-'zscroll' '_zscroll'
 'zsetattr' '_zattr'
 'zsh' '_zsh'
 'zsh-mime-handler' '_zsh-mime-handler'
@@ -1825,10 +1825,10 @@ bindkey '^[~' _bash_complete-word
 
 autoload -Uz _bat _bluetoothctl _bootctl _busctl _bwrap \
             _cargo _chafa _checkupdates _chwd _coredumpctl \
-            _ctr _curl _docker _eza _fastfetch \
-            _fd _gh _ghostty _gum _hostnamectl \
-            _hyprctl _hyprpm _img2sixel _insmod _journalctl \
-            _kernel-install _kitty _localectl _loginctl _lsmod \
+            _ctr _curl _dkms _docker _eza \
+            _fastfetch _fd _gh _ghostty _gum \
+            _hostnamectl _hyprctl _hyprpm _img2sixel _insmod \
+            _journalctl _kernel-install _localectl _loginctl _lsmod \
             _machinectl _mako _makoctl _meson _mise \
             _mkinitcpio _mpv _netctl _networkctl _ninja \
             _oomctl _p11-kit _paccache _pacdiff _paclist \
@@ -1842,8 +1842,8 @@ autoload -Uz _bat _bluetoothctl _bootctl _busctl _bwrap \
             _systemd-nspawn _systemd-path _systemd-run _systemd-tmpfiles _timedatectl \
             _tldr _trust _udevadm _udisks2 _updpkgsums \
             _upower _userdbctl _varlinkctl _wl-copy _wl-paste \
-            _wpctl _xremap _ya _yazi _zellij \
-            _zoxide _zscroll _cdr _all_labels _all_matches \
+            _wl-screenrec _wpctl _xremap _ya _yazi \
+            _zellij _zoxide _cdr _all_labels _all_matches \
             _alternative _approximate _arg_compile _arguments _as_if \
             _bash_completions _cache_invalid _call_function _combination _complete \
             _complete_debug _complete_help _complete_help_generic _complete_tag _comp_locale \

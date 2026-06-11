@@ -162,6 +162,8 @@ install_official_packages() {
     "socat"
     "bitwarden"
     "spotify-launcher"
+    "nautilus" 
+    "nautilus-python"
   )
 
   sudo pacman -S --needed --noconfirm "${CORE_PACKAGES[@]}"

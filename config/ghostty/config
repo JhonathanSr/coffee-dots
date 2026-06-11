@@ -1,6 +1,5 @@
 # Dynamic theme colors
-config-file = ?"ghostty.conf"
-
+config-file = ?"~/coffee-dots/config/themes/current/next-theme/ghostty.conf"
 # Font
 font-family = "JetBrainsMono Nerd Font"
 font-style = Regular

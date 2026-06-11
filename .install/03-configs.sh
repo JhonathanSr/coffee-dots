@@ -154,11 +154,11 @@ main() {
   setup_mimetypes
 
   # Lanzadores (.desktop)
-  ln -s "$REAL_HOME/coffee-dots/applications/"*.desktop "$REAL_HOME/.local/share/applications" 2>/dev/null || true
-  ln -s "$REAL_HOME/coffee-dots/applications/hidden/"*.desktop "$REAL_HOME/.local/share/applications" 2>/dev/null || true
+  ln -s ~/coffee-dots/applications/*.desktop ~/.local/share/applications 2>/dev/null || true
+  ln -s ~/coffee-dots/applications/hidden/*.desktop ~/.local/share/applications 2>/dev/null || true
 
   # Recursos Visuales para Lanzadores
-  ln -s "$REAL_HOME/coffee-dots/applications/icons" "$REAL_HOME/.local/share/" 2>/dev/null || true
+  ln -s ~/coffee-dots/applications/icons ~/.local/share/ 2>/dev/null || true
 
   # Refrescar base de datos de escritorio
   update-desktop-database "$REAL_HOME/.local/share/applications" 2>/dev/null || true
@@ -216,6 +216,10 @@ Exec = $COFFEE_BIN_DIR/restart-walker
 EOF
 
 sudo systemctl enable --now iwd
+
+elephant service enable
+systemctl --user start elephant
+
 
   printf "\n%b\n" "${CGR}✓ [Fase 3] Despliegue de entorno, Zsh modular y mimetypes completado con éxito.${CNC}"
 }

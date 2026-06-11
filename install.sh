@@ -43,17 +43,17 @@ show_subtext() {
 
 # --- Fase 0: Pre-flight Checks ---
 # Verificación de estado del sistema antes de iniciar.
-#0source "$PATH_INSTALL/guard.sh"
+#source "$PATH_INSTALL/guard.sh"
 
 # --- Fase 1: Inicialización del Sistema y Repositorios [1/5] ---
-show_subtext "Inicializando repositorios y actualizando llaves... [1/5]"
-bash "$PATH_INSTALL/00-system_init.sh"  # Tu antiguo aur.sh optimizado
+#show_subtext "Inicializando repositorios y actualizando llaves... [1/5]"
+#bash "$PATH_INSTALL/00-system_init.sh"  # Tu antiguo aur.sh optimizado
 
 
 # --- Fase 2: Instalación de Paquetes y Herramientas [2/5] ---
-show_subtext "Instalando paquetes oficiales y del AUR [2/5]"
-bash "$PATH_INSTALL/01-pacman.sh"
-bash "$PATH_INSTALL/02-paru.sh"
+#show_subtext "Instalando paquetes oficiales y del AUR [2/5]"
+#bash "$PATH_INSTALL/01-pacman.sh"
+#bash "$PATH_INSTALL/02-paru.sh"
 
 # --- Fase 3: Despliegue de Configuraciones Estáticas y Aplicaciones [3/5] ---
 #show_subtext "Desplegando archivos de configuración (Dotfiles) y mimetypes [3/5]"
@@ -65,20 +65,20 @@ bash "$PATH_INSTALL/02-paru.sh"
 #show_subtext "Analizando hardware e inyectando optimizaciones gráficas [4/5]"
 
 # Módulo dedicado a revisar si tienes la GPU dedicada de la Lenovo LOQ o AMD
-#bash "$PATH_INSTALL/04-.sh"
+#bash "$PATH_INSTALL/04-themes.s"
 
 # --- Fase 5: Ajustes de Entorno, Hooks y Sistema [5/5] ---
-#show_subtext "Aplicando ganchos finales del sistema y activando servicios [5/5]"
+show_subtext "Aplicando ganchos finales del sistema y activando servicios [5/5]"
 # --- Fase 5: System Hooks [5/5] ---
-#printf "%b\n" "${CBL}${BLD}[Coffee-Dots] Ejecutando ganchos de sistema modulares...${CNC}"
-#if [ -d "$PATH_INSTALL/hooks" ]; then
-#  for hook in "$PATH_INSTALL"/hooks/[0-9]*.sh; do
-#    if [ -x "$hook" ]; then
-#      printf "%b\n" "${BLD}${CYE}→ Corriendo gancho: $(basename "$hook")${CNC}"
-#      bash "$hook"
-#    fi
-#  done
-#fi
+printf "%b\n" "${CBL}${BLD}[Coffee-Dots] Ejecutando ganchos de sistema modulares...${CNC}"
+if [ -d "$PATH_INSTALL/hooks" ]; then
+  for hook in "$PATH_INSTALL"/hooks/[0-9]*.sh; do
+    if [ -x "$hook" ]; then
+      printf "%b\n" "${BLD}${CYE}→ Corriendo gancho: $(basename "$hook")${CNC}"
+      bash "$hook"
+    fi
+  done
+fi
 
 # Sincronización final de la indexación de archivos locales
 sudo updatedb

@@ -88,10 +88,12 @@ install_aur_packages() {
     "bibata-cursor-git"
     "visual-studio-code-bin"
     "elephant"
+    "elephant-providerlist" 
+    "elephant-desktopapplications"
   )
 
   # Ejecución de Paru delegando el logging de errores
-  paru -S --needed --noconfirm "${AUR_PACKAGES[@]}" 2>>"$ERROR_LOG"
+  paru -S --needed "${AUR_PACKAGES[@]}" 2>>"$ERROR_LOG"
 }
 
 # ==============================================================================
