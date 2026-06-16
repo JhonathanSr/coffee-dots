@@ -22,8 +22,7 @@ CNC=$(tput sgr0)    # Reset colors
 set -e
 
 # Rutas globales del repositorio
-export COFFEE_PATH="$HOME/coffee-dots"
-PATH_INSTALL="$COFFEE_PATH/.install"
+PATH_INSTALL="$HOME/Projects/coffee-dots/install"
 
 # --- Manejo de Errores (Global Catch) ---
 catch_errors() {
@@ -40,45 +39,13 @@ show_subtext() {
   echo -e "${CYE}${BLD}$1${CNC}"
   echo
 }
-
-# --- Fase 0: Pre-flight Checks ---
-# Verificación de estado del sistema antes de iniciar.
-#0source "$PATH_INSTALL/guard.sh"
-
-# --- Fase 1: Inicialización del Sistema y Repositorios [1/5] ---
-show_subtext "Inicializando repositorios y actualizando llaves... [1/5]"
-bash "$PATH_INSTALL/00-system_init.sh"  # Tu antiguo aur.sh optimizado
-
-
 # --- Fase 2: Instalación de Paquetes y Herramientas [2/5] ---
 show_subtext "Instalando paquetes oficiales y del AUR [2/5]"
-bash "$PATH_INSTALL/01-pacman.sh"
-bash "$PATH_INSTALL/02-paru.sh"
-
-# --- Fase 3: Despliegue de Configuraciones Estáticas y Aplicaciones [3/5] ---
-#show_subtext "Desplegando archivos de configuración (Dotfiles) y mimetypes [3/5]"
-
-# Módulo que clona o copia tus carpetas espejo hacia ~/.config
-#bash "$PATH_INSTALL/03-configs.sh"
-
-# --- Fase 4: Controladores de Hardware Inteligentes [4/5] ---
-#show_subtext "Analizando hardware e inyectando optimizaciones gráficas [4/5]"
-
-# Módulo dedicado a revisar si tienes la GPU dedicada de la Lenovo LOQ o AMD
-#bash "$PATH_INSTALL/04-.sh"
-
-# --- Fase 5: Ajustes de Entorno, Hooks y Sistema [5/5] ---
-#show_subtext "Aplicando ganchos finales del sistema y activando servicios [5/5]"
-# --- Fase 5: System Hooks [5/5] ---
-#printf "%b\n" "${CBL}${BLD}[Coffee-Dots] Ejecutando ganchos de sistema modulares...${CNC}"
-#if [ -d "$PATH_INSTALL/hooks" ]; then
-#  for hook in "$PATH_INSTALL"/hooks/[0-9]*.sh; do
-#    if [ -x "$hook" ]; then
-#      printf "%b\n" "${BLD}${CYE}→ Corriendo gancho: $(basename "$hook")${CNC}"
-#      bash "$hook"
-#    fi
-#  done
-#fi
+bash "$PATH_INSTALL/pacman.sh"
+#bash "$PATH_INSTALL/paru.sh"
+bash "$PATH_INSTALL/configs.sh"
+bash "$PATH_INSTALL/git.sh"
+bash "$PATH_INSTALL/firewall.sh"
 
 # Sincronización final de la indexación de archivos locales
 sudo updatedb
@@ -88,4 +55,3 @@ echo -e "\n${CGR}${BLD}¡Disfruta tu café con Arch Linux y Coffee-Dots! ☕${CN
 
 # Pausa de cortesía antes del reinicio necesario para aplicar cambios.
 sleep 2
-

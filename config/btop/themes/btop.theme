@@ -1,63 +1,68 @@
+# Theme: Transparent Prism - Lavender
+# Generated from Zed/Aero UI Palette
+
 # Main background, empty for terminal default, need to be empty if you want transparent background
 theme[main_bg]=""
 
-# Main text color
-theme[main_fg]="#f6dcac"
+# Main text color (neutral_10)
+theme[main_fg]="#f7f2ff"
 
-# Title color for boxes
-theme[title]="#3f8f8a"
+# Title color for boxes (accent_indigo / accent_purple)
+theme[title]="#948ae3"
 
-# Highlight color for keyboard shortcuts
-theme[hi_fg]="#8cbfb8"
+# Highlight color for keyboard shortcuts (accent_blue)
+theme[hi_fg]="#59d4e6"
 
-# Background color of selected item in processes box
-theme[selected_bg]="#134e5a"
+# Background color of selected item in processes box (neutral_3)
+theme[selected_bg]="#383540"
 
-# Foreground color of selected item in processes box
-theme[selected_fg]="#f6dcac"
+# Foreground color of selected item in processes box (neutral_10)
+theme[selected_fg]="#f7f2ff"
 
-# Color of inactive/disabled text
-theme[inactive_fg]="#134e5a"
+# Color of inactive/disabled text (neutral_6)
+theme[inactive_fg]="#5c5963"
 
-# Misc colors for processes box including mini cpu graphs, details memory graph and details status text
-theme[proc_misc]="#3f8f8a"
+# Misc colors for processes box including mini cpu graphs (accent_warm_grey)
+theme[proc_misc]="#8a878f"
 
 # Box outline and divider line color
-theme[cpu_box]="#e97b3c"
-theme[mem_box]="#e97b3c"
-theme[net_box]="#e97b3c"
-theme[proc_box]="#e97b3c"
-theme[div_line]="#134e5a"
+theme[cpu_box]="#948ae3"
+theme[mem_box]="#948ae3"
+theme[net_box]="#948ae3"
+theme[proc_box]="#948ae3"
+theme[div_line]="#2e2b33"
 
-# Gradient for all meters and graphs
-theme[temp_start]="#a7c9c6"
-theme[temp_mid]="#8cbfb8"
-theme[temp_end]="#028391"
+# Temperature graph gradient (accent_blue -> accent_indigo -> accent_pink)
+theme[temp_start]="#59d4e6"
+theme[temp_mid]="#948ae3"
+theme[temp_end]="#fc618c"
 
-theme[cpu_start]="#a7c9c6"
-theme[cpu_mid]="#e97b3c"
-theme[cpu_end]="#f85525"
+# CPU graph gradient (accent_blue -> accent_purple -> bright_red)
+theme[cpu_start]="#59d4e6"
+theme[cpu_mid]="#948ae3"
+theme[cpu_end]="#fc618c"
 
-theme[free_start]="#faa968"
-theme[free_mid]="#e97b3c"
-theme[free_end]="#f85525"
+# Memory & Network gradients (ext_blue -> ext_purple -> ext_pink)
+theme[free_start]="#59d4e6"
+theme[free_mid]="#948ae3"
+theme[free_end]="#fc618c"
 
-theme[cached_start]="#faa968"
-theme[cached_mid]="#e97b3c"
-theme[cached_end]="#f85525"
+theme[cached_start]="#59d4e6"
+theme[cached_mid]="#948ae3"
+theme[cached_end]="#fc618c"
 
-theme[available_start]="#faa968"
-theme[available_mid]="#e97b3c"
-theme[available_end]="#f85525"
+theme[available_start]="#59d4e6"
+theme[available_mid]="#948ae3"
+theme[available_end]="#fc618c"
 
-theme[used_start]="#faa968"
-theme[used_mid]="#e97b3c"
-theme[used_end]="#f85525"
+theme[used_start]="#59d4e6"
+theme[used_mid]="#948ae3"
+theme[used_end]="#fc618c"
 
-theme[download_start]="#faa968"
-theme[download_mid]="#e97b3c"
-theme[download_end]="#f85525"
+theme[download_start]="#59d4e6"
+theme[download_mid]="#948ae3"
+theme[download_end]="#fc618c"
 
-theme[upload_start]="#faa968"
-theme[upload_mid]="#e97b3c"
-theme[upload_end]="#f85525"
+theme[upload_start]="#59d4e6"
+theme[upload_mid]="#948ae3"
+theme[upload_end]="#fc618c"
